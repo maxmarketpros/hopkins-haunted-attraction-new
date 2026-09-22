@@ -135,11 +135,14 @@ const browser = await chromium.launch();
   await page.waitForTimeout(500);
   ok('ticket bar hides over the footer', await page.evaluate(() => !document.querySelector('.ticket-bar').classList.contains('is-visible')));
 
-  // Mobile menu
-  await page.evaluate(() => window.scrollTo(0, 0));
+  // Mobile menu (opened while scrolled down: header backdrop-filter must not trap the fixed panel)
+  await page.evaluate(() => window.scrollTo(0, 900));
+  await page.waitForTimeout(300);
   await page.click('.menu-toggle');
   await page.waitForTimeout(300);
   ok('mobile menu opens', await page.evaluate(() => !document.getElementById('mobile-menu').hidden));
+  const menuRect = await page.evaluate(() => { const r = document.getElementById('mobile-menu').getBoundingClientRect(); return [Math.round(r.top), Math.round(r.height)]; });
+  ok('mobile menu covers the viewport when scrolled', menuRect[0] === 0 && menuRect[1] >= 800, menuRect.join(','));
   ok('body scroll locked while menu open', await page.evaluate(() => document.body.classList.contains('scroll-lock')));
   ok('focus inside menu', await page.evaluate(() => document.getElementById('mobile-menu').contains(document.activeElement)));
   ok('active page marked in menu', await page.evaluate(() => !!document.querySelector('#mobile-menu a[aria-current="page"]')));

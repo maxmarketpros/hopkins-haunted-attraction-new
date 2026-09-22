@@ -58,36 +58,39 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
     </div>
   </div>
 
-  <div class="mobile-menu" id="mobile-menu" hidden>
-    <div class="mobile-menu__top container">
-      <span class="label label--plain">Hopkins Haunted Attraction</span>
-      <button class="menu-close" type="button">
-        <Icon name="close" />
-        <span class="visually-hidden">Close menu</span>
-      </button>
-    </div>
-    <nav class="container" aria-label="Mobile">
-      <ul class="clean mobile-menu__list">
-        {
-          nav.map((item) => (
-            <li>
-              <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-      <a class="btn btn--primary mobile-menu__buy" href={links.tickets} target="_blank" rel="noopener">
-        Buy Tickets <Icon name="external" size={18} />
-      </a>
-      <p class="mobile-menu__meta">
-        <a href={links.phone}>{business.phoneDisplay}</a><br />
-        {business.address.street} {business.address.city}, {business.address.region} {business.address.postal}
-      </p>
-    </nav>
-  </div>
 </header>
+
+<!-- Rendered outside <header>: its backdrop-filter would otherwise become the containing block for this fixed panel. -->
+<div class="mobile-menu" id="mobile-menu" hidden>
+  <div class="mobile-menu__top container">
+    <span class="label label--plain">Hopkins Haunted Attraction</span>
+    <button class="menu-close" type="button">
+      <Icon name="close" />
+      <span class="visually-hidden">Close menu</span>
+    </button>
+  </div>
+  <nav class="container" aria-label="Mobile">
+    <ul class="clean mobile-menu__list">
+      {
+        nav.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <a class="btn btn--primary mobile-menu__buy" href={links.tickets} target="_blank" rel="noopener">
+      Buy Tickets <Icon name="external" size={18} />
+    </a>
+    <p class="mobile-menu__meta">
+      <a href={links.phone}>{business.phoneDisplay}</a><br />
+      {business.address.street} {business.address.city}, {business.address.region} {business.address.postal}
+    </p>
+  </nav>
+</div>
+
 
 <style>
   .site-header {
