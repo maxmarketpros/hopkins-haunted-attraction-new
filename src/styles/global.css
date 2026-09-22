@@ -147,7 +147,7 @@ p {
   font-family: var(--font-display);
   font-weight: 800;
   line-height: 0.95;
-  letter-spacing: -0.005em;
+  letter-spacing: 0.012em;
   text-transform: uppercase;
   margin: 0 0 0.5em;
   text-wrap: balance;

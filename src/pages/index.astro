@@ -98,7 +98,7 @@ const kids = admissionTickets.find((t) => t.id === 'haunt-kids-pass')!;
     <div class="container">
       <div class="cast__head reveal">
         <p class="label">The Cast</p>
-        <h2 id="cast-title">They’re waiting<br />in the trees.</h2>
+        <h2 id="cast-title">They’re waiting in the trees.</h2>
         <p class="muted cast__sub">Eight characters walk the trail this season. Here are four of them.</p>
       </div>
       <ul class="clean cast__grid">
@@ -210,7 +210,7 @@ const kids = admissionTickets.find((t) => t.id === 'haunt-kids-pass')!;
       <Image src={handprint} alt="" class="handprint closing__hand" width={220} height={350} loading="lazy" />
     </div>
     <div class="container closing__inner reveal">
-      <h2 id="closing-title">Do you have what it takes<br />to make it out alive?</h2>
+      <h2 id="closing-title">Do you have what it takes to make it out alive?</h2>
       <p class="lede muted">{datesSentence}. {season.hoursLine}. {business.address.city}, {business.address.region}.</p>
       <a class="btn btn--primary closing__btn" href={links.tickets} target="_blank" rel="noopener">
         Buy Tickets <Icon name="external" size={18} />
@@ -321,7 +321,7 @@ const kids = admissionTickets.find((t) => t.id === 'haunt-kids-pass')!;
   }
 
   .intro__copy h2 {
-    max-width: 12ch;
+    max-width: 20ch;
   }
 
   /* Cast */
@@ -343,7 +343,7 @@ const kids = admissionTickets.find((t) => t.id === 'haunt-kids-pass')!;
   }
 
   .cast__head h2 {
-    max-width: 10ch;
+    max-width: 16ch;
   }
 
   .cast__sub {
@@ -586,7 +586,7 @@ const kids = admissionTickets.find((t) => t.id === 'haunt-kids-pass')!;
 
   .closing h2 {
     font-size: clamp(40px, 7vw, 104px);
-    max-width: 14ch;
+    max-width: 22ch;
   }
 
   .closing__btn {

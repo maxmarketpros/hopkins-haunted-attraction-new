@@ -20,7 +20,7 @@ import { business, links, season, recruitment, datesSentence } from '../data/sit
     <div class="container chero__grid">
       <div class="chero__copy">
         <p class="label">Seasonal Jobs · {business.address.city}, {business.address.region}</p>
-        <h1 id="chero-title">Join the<br />Haunt <span class="accent">Crew</span></h1>
+        <h1 id="chero-title">Join the Haunt <span class="accent">Crew</span></h1>
         <p class="lede">
           Have a passion for acting and a love for everything creepy? Hopkins is looking for the next generation of
           fear-inducers to bring the trail to life in {business.address.county}.
@@ -167,7 +167,8 @@ import { business, links, season, recruitment, datesSentence } from '../data/sit
   }
 
   .chero h1 {
-    max-width: 8ch;
+    font-size: clamp(52px, 7vw, 108px);
+    max-width: 12ch;
     margin-bottom: 0.3em;
   }
 
