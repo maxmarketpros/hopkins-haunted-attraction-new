@@ -29,15 +29,6 @@ const browser = await chromium.launch();
   const state = await page.getAttribute('.hero-video', 'data-state');
   ok('hero video autoplays (muted)', state === 'playing', `state=${state}`);
 
-  await page.click('.video-toggle');
-  await page.waitForTimeout(300);
-  const paused = await page.evaluate(() => document.querySelector('.hero-video video').paused);
-  ok('hero pause control pauses video', paused === true);
-  await page.click('.video-toggle');
-  await page.waitForTimeout(500);
-  const resumed = await page.evaluate(() => !document.querySelector('.hero-video video').paused);
-  ok('hero play control resumes video', resumed === true);
-
   // Trailer modal
   await page.click('[data-trailer-open]');
   await page.waitForTimeout(500);

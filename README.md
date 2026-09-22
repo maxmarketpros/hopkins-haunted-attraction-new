@@ -60,7 +60,7 @@ Implemented in `src/components/HeroVideo.astro` + `src/scripts/main.js`:
 - Autoplays muted, loops, plays inline; audio never autoplays.
 - The `poster` is the original (near-black) first frame so playback starts seamlessly; a still from the footage is layered underneath and shown until playback begins, for `prefers-reduced-motion`, on `saveData`/2g–3g connections, or if autoplay is blocked.
 - 720p on viewports ≥768px, 480p below. `preload="none"`; the source is assigned by script.
-- Visible pause/play control (bottom right). Playback pauses when the hero leaves the viewport, the tab is hidden, or the trailer modal is open.
+- Playback pauses when the hero leaves the viewport, the tab is hidden, or the trailer modal is open. (A pause control was built and removed at the owner’s request; `main.js` still supports a `.video-toggle` button if one is added back.)
 - "Watch Trailer" opens an accessible `<dialog>` with the same file plus audio and controls; without JavaScript the link goes to `/experience/#trailer`.
 
 ## Hosting and redirects

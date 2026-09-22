@@ -1,7 +1,6 @@
 ---
 import { getImage } from 'astro:assets';
 import logoWide from '../assets/images/logo-wide.png';
-import logoSquare from '../assets/images/logo-square.png';
 import { nav, links, business } from '../data/site';
 import Icon from './Icon.astro';
 
@@ -13,8 +12,6 @@ const { path, overlay = false } = Astro.props;
 
 const wide = await getImage({ src: logoWide, width: 320, height: 161, format: 'webp' });
 const wide2x = await getImage({ src: logoWide, width: 640, height: 322, format: 'webp' });
-const square = await getImage({ src: logoSquare, width: 96, height: 96, format: 'webp' });
-const square2x = await getImage({ src: logoSquare, width: 192, height: 192, format: 'webp' });
 
 const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 ---
@@ -23,7 +20,6 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
   <div class="container site-header__inner">
     <a href="/" class="brand" aria-label={`${business.name} – Home`}>
       <picture>
-        <source media="(max-width: 719px)" srcset={`${square.src} 1x, ${square2x.src} 2x`} width="48" height="48" />
         <img
           src={wide.src}
           srcset={`${wide.src} 1x, ${wide2x.src} 2x`}
@@ -146,8 +142,7 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
 
   @media (max-width: 719px) {
     .brand img {
-      height: 48px;
-      width: 48px;
+      height: 46px;
     }
   }
 

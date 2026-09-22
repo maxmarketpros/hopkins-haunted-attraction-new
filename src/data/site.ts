@@ -102,6 +102,10 @@ export function formatDate(iso: string, opts: Intl.DateTimeFormatOptions) {
 }
 
 export const datesInline = season.ranges.map((r) => r.short).join(' · ');
+/** Month shown once per run: "Oct 16–17 · 23–25 · 29–31 · Nov 1". */
+export const datesCompact = season.ranges
+  .map((r, i, arr) => (i > 0 && r.short.slice(0, 3) === arr[i - 1].short.slice(0, 3) ? r.short.slice(4) : r.short))
+  .join(' · ');
 export const datesSentence = 'October 16–17, 23–25, 29–31 and November 1';
 
 /* ------------------------------------------------------------------ */

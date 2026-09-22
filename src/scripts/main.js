@@ -117,7 +117,7 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const hero = $('.hero-video');
   if (!hero) return;
   const video = $('video', hero);
-  const btn = $('.video-toggle', hero);
+  const btn = $('.video-toggle', hero); // optional control (not rendered by default)
   if (!video) return;
 
   const conn = navigator.connection;

@@ -8,7 +8,7 @@
 import { Image } from 'astro:assets';
 import still from '../assets/images/hero-still.jpg';
 import Icon from './Icon.astro';
-import { links, business, datesInline, season } from '../data/site';
+import { links, business, datesCompact, season } from '../data/site';
 ---
 
 <section class="hero hero-video" data-state="loading" aria-labelledby="hero-title">
@@ -41,8 +41,9 @@ import { links, business, datesInline, season } from '../data/site';
   </div>
 
   <div class="container hero__content">
-    <p class="label">
-      {business.address.city}, {business.address.region} · {business.address.county} · {season.year} Season
+    <p class="label hero__label">
+      <span>{business.address.city}, {business.address.region} · {business.address.county}</span>
+      <span class="hero__label-season">{season.year} Season</span>
     </p>
     <h1 id="hero-title">
       Enter the Sinister <span class="accent">Woods.</span>
@@ -60,16 +61,10 @@ import { links, business, datesInline, season } from '../data/site';
       </a>
     </div>
     <p class="hero__dates">
-      <span>{datesInline}</span>
-      <span class="hero__dates-sep" aria-hidden="true">—</span>
-      <span>{season.hoursLine}</span>
+      <span class="hero__dates-nights">{datesCompact}</span>
+      <span class="hero__dates-hours">{season.hoursLine}</span>
     </p>
   </div>
-
-  <button class="video-toggle" type="button" aria-pressed="false" aria-label="Pause background video">
-    <Icon name="pause" class="video-toggle__pause" />
-    <Icon name="play" class="video-toggle__play" />
-  </button>
 </section>
 
 <style>
@@ -177,67 +172,78 @@ import { links, business, datesInline, season } from '../data/site';
     }
   }
 
+  .hero__label {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+
+  .hero__label-season {
+    color: var(--red-text);
+  }
+
+  .hero__label-season::before {
+    content: '·';
+    color: var(--muted);
+    margin-right: 12px;
+  }
+
+  @media (max-width: 719px) {
+    .hero__label {
+      display: block;
+      letter-spacing: 0.12em;
+      line-height: 1.5;
+    }
+    .hero__label::before {
+      display: block;
+      margin-bottom: 10px;
+    }
+    .hero__label span {
+      display: block;
+    }
+    .hero__label-season::before {
+      content: none;
+    }
+  }
+
   .hero__dates {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px 12px;
+    align-items: center;
+    gap: 8px 0;
     font-size: 14px;
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--bone);
     margin: 0;
   }
 
-  .hero__dates-sep {
-    color: var(--red-hi);
+  .hero__dates-hours::before {
+    content: '';
+    display: inline-block;
+    width: 22px;
+    height: 2px;
+    background: var(--red-hi);
+    margin: 0 14px;
+    vertical-align: middle;
   }
 
   @media (max-width: 719px) {
     .hero__dates {
-      padding-right: 72px;
+      display: grid;
+      gap: 6px;
+      padding-top: 14px;
+      border-top: 1px solid var(--rule);
     }
-  }
-
-  .video-toggle {
-    position: absolute;
-    right: max(var(--gutter), env(safe-area-inset-right));
-    bottom: clamp(20px, 3vw, 36px);
-    width: 48px;
-    height: 48px;
-    display: grid;
-    place-items: center;
-    background: rgba(8, 10, 9, 0.6);
-    border: 1px solid var(--rule-strong);
-    color: var(--bone);
-    cursor: pointer;
-    border-radius: 50%;
-    z-index: 2;
-  }
-
-  .video-toggle:hover {
-    border-color: var(--bone);
-  }
-
-  .video-toggle svg {
-    width: 22px;
-    height: 22px;
-    grid-area: 1 / 1;
-  }
-
-  .video-toggle .video-toggle__play,
-  .video-toggle.is-playing .video-toggle__pause {
-    display: block;
-  }
-
-  .video-toggle .video-toggle__pause,
-  .video-toggle.is-playing .video-toggle__play {
-    display: none;
-  }
-
-  /* Without JS the still image is the hero. Hide the toggle. */
-  html:not(.js) .video-toggle {
-    display: none;
+    .hero__dates-nights {
+      font-size: 15px;
+    }
+    .hero__dates-hours {
+      color: var(--muted);
+    }
+    .hero__dates-hours::before {
+      content: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
