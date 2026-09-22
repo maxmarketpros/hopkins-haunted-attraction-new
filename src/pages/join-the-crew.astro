@@ -1,0 +1,349 @@
+---
+import { Picture, Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import crewArt from '../assets/images/join-haunt-crew.jpg';
+import crewBanner from '../assets/images/crew-join-banner.jpg';
+import flyer from '../assets/images/tryouts-flyer.jpg';
+import handprint from '../assets/images/handprint.png';
+import { business, links, season, recruitment, datesSentence } from '../data/site';
+---
+
+<Base
+  title="Scare Actor Jobs in Simpsonville | Join the Hopkins Crew"
+  description={`Paid, by-the-day scare actor positions at Hopkins Haunted Attraction in Simpsonville, SC (Greenville County). Ages 16+, no experience required, auditions and orientation required. Apply for the ${season.year} season.`}
+  path="/join-the-crew/"
+  breadcrumbs={[{ name: 'Join the Crew', path: '/join-the-crew/' }]}
+>
+  <!-- A. Hero -->
+  <section class="chero" aria-labelledby="chero-title">
+    <div class="container chero__grid">
+      <div class="chero__copy">
+        <p class="label">Seasonal Jobs · {business.address.city}, {business.address.region}</p>
+        <h1 id="chero-title">Join the<br />Haunt <span class="accent">Crew</span></h1>
+        <p class="lede">
+          Have a passion for acting and a love for everything creepy? Hopkins is looking for the next generation of
+          fear-inducers to bring the trail to life in {business.address.county}.
+        </p>
+        <div class="chero__actions">
+          <a id="primary-cta" class="btn btn--primary" href={links.apply} target="_blank" rel="noopener">
+            Apply Now <Icon name="external" size={18} />
+          </a>
+          <a class="btn btn--ghost" href="#details">What to expect</a>
+        </div>
+        <p class="muted chero__meta">Paid by the day · Ages 16+ · No experience required</p>
+      </div>
+      <figure class="chero__art media reveal">
+        <Picture
+          src={crewArt}
+          alt="Recruitment artwork reading “Join the Haunt Crew” in distressed red letters over bare winter trees, with a screaming figure on the left and a grinning clown on the right and the red handprint logo."
+          formats={['avif', 'webp']}
+          width={1400}
+          height={933}
+          sizes="(min-width: 900px) 55vw, 100vw"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </figure>
+    </div>
+  </section>
+
+  <!-- B. Opportunity -->
+  <section class="section opp" id="details" aria-labelledby="opp-h">
+    <div class="container opp__grid">
+      <div class="reveal">
+        <p class="label">The Opportunity</p>
+        <h2 id="opp-h">Your nightmare job</h2>
+      </div>
+      <div class="opp__copy reveal">
+        <p class="lede">
+          Work alongside makeup artists, set designers and fellow performers on a cinematic horror production, and
+          terrify thousands of visitors over the season.
+        </p>
+        <p>
+          The core roles are scare actors on the trail. Beyond acting, the production involves makeup, set design and
+          guest relations, so if you are a creative person who wants hands-on experience in live performance and a
+          supportive, safety-first team, this is a rare seasonal gig in {business.address.county}. Expect to build
+          friendships, learn real skills and be part of a trusted local production.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="banner reveal" aria-hidden="true">
+    <Picture
+      src={crewBanner}
+      alt=""
+      formats={['avif', 'webp']}
+      width={1500}
+      height={300}
+      sizes="100vw"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+
+  <!-- C. Current application facts -->
+  <section class="section section--surface facts" aria-labelledby="facts-h">
+    <div class="container facts__grid">
+      <div class="reveal">
+        <p class="label">How It Works</p>
+        <h2 id="facts-h">Before you apply</h2>
+        <p class="muted">Straight from the current application form. Recheck the form itself for the latest details.</p>
+      </div>
+      <div class="reveal">
+        <ol class="facts__list">
+          {recruitment.facts.map((f) => <li>{f}</li>)}
+        </ol>
+        <div class="facts__nights">
+          <p class="label">Season nights</p>
+          <p class="facts__dates">{datesSentence}</p>
+          <p class="muted">{recruitment.actorNightsNote}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- D. Recruitment artwork (past flyer) -->
+  <section class="section section--sm past" aria-labelledby="past-h">
+    <div class="container">
+      <details class="past__details">
+        <summary>
+          <span class="label label--plain" id="past-h">{recruitment.pastFlyer.label}</span>
+          <span class="past__summary">July 25 tryouts flyer (date has passed)</span>
+        </summary>
+        <figure class="past__fig">
+          <Picture
+            src={flyer}
+            alt="Actor Recruitment & Tryouts flyer: July 25 at 11:00 a.m., 3717 Fork Shoals Rd., Simpsonville, SC 29680. It invites energetic, dedicated and fearless people to join the 2026 Scare Team, notes no experience is necessary, and lists what to expect: come dressed comfortably, participate in scare stations, outdoor activities, and learn what it takes to be a scare actor."
+            formats={['avif', 'webp']}
+            width={900}
+            height={600}
+            sizes="(min-width: 900px) 640px, 100vw"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption class="muted">{recruitment.pastFlyer.caption}</figcaption>
+        </figure>
+      </details>
+    </div>
+  </section>
+
+  <!-- E. Application -->
+  <section class="section apply" aria-labelledby="apply-h">
+    <Image src={handprint} alt="" class="handprint apply__hand" width={220} height={350} loading="lazy" />
+    <div class="container apply__inner reveal">
+      <p class="label">Apply</p>
+      <h2 id="apply-h">Bring the haunt to life</h2>
+      <p class="muted">
+        The application and waiver are handled in the attraction’s Google Form. Questions before you apply? Email{' '}
+        <a href={links.email}>{business.email}</a>.
+      </p>
+      <a class="btn btn--primary apply__btn" href={links.apply} target="_blank" rel="noopener">
+        Apply Now <Icon name="external" size={18} />
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .chero {
+    padding-top: clamp(32px, 5vw, 72px);
+    padding-bottom: clamp(40px, 6vw, 88px);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .chero__grid {
+    display: grid;
+    gap: clamp(28px, 4vw, 56px);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .chero__grid {
+      grid-template-columns: 5fr 7fr;
+    }
+  }
+
+  .chero h1 {
+    max-width: 8ch;
+    margin-bottom: 0.3em;
+  }
+
+  .chero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 24px 0 16px;
+  }
+
+  .chero__meta {
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .chero__art {
+    margin: 0;
+    aspect-ratio: 3 / 2;
+    border: 1px solid var(--rule);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  }
+
+  @media (max-width: 899px) {
+    .chero__art {
+      order: -1;
+      margin-inline: calc(var(--gutter) * -1);
+      border-left: 0;
+      border-right: 0;
+    }
+  }
+
+  .opp__grid,
+  .facts__grid {
+    display: grid;
+    gap: clamp(20px, 3vw, 48px);
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .opp__grid,
+    .facts__grid {
+      grid-template-columns: 5fr 7fr;
+    }
+  }
+
+  .banner :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-block: 1px solid var(--rule);
+  }
+
+  .facts__list {
+    counter-reset: fact;
+    list-style: none;
+    margin: 0 0 32px;
+    padding: 0;
+    display: grid;
+  }
+
+  .facts__list li {
+    counter-increment: fact;
+    position: relative;
+    padding: 16px 0 16px 56px;
+    border-top: 1px solid var(--rule);
+    max-width: 66ch;
+  }
+
+  .facts__list li:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .facts__list li::before {
+    content: counter(fact, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 14px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 28px;
+    color: var(--red-hi);
+    line-height: 1;
+  }
+
+  .facts__nights .label {
+    margin-bottom: 8px;
+  }
+
+  .facts__dates {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(26px, 3vw, 36px);
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .past__details {
+    border: 1px dashed var(--rule-strong);
+    padding: 0 clamp(16px, 3vw, 28px);
+  }
+
+  .past__details summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 18px;
+    padding: 18px 0;
+    min-height: 44px;
+  }
+
+  .past__details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .past__details summary .label {
+    margin: 0;
+  }
+
+  .past__summary {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .past__summary::after {
+    content: ' +';
+    color: var(--red-hi);
+  }
+
+  .past__details[open] .past__summary::after {
+    content: ' –';
+  }
+
+  .past__fig {
+    margin: 0 0 24px;
+    display: grid;
+    gap: 12px;
+    max-width: 640px;
+  }
+
+  .past__fig figcaption {
+    font-size: 14px;
+  }
+
+  .apply {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    background: radial-gradient(60% 80% at 50% 100%, rgba(165, 29, 37, 0.22), transparent 70%), var(--bg);
+  }
+
+  .apply__hand {
+    left: 6%;
+    bottom: -40px;
+    transform: rotate(-14deg);
+  }
+
+  .apply__inner {
+    display: grid;
+    justify-items: center;
+  }
+
+  .apply__inner p {
+    max-width: 52ch;
+    overflow-wrap: anywhere;
+  }
+
+  .apply__btn {
+    margin-top: 8px;
+    min-width: 240px;
+  }
+</style>

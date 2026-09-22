@@ -1,0 +1,151 @@
+---
+import type { Ticket } from '../data/site';
+import { links, money } from '../data/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  ticket: Ticket;
+  compact?: boolean;
+}
+const { ticket, compact = false } = Astro.props;
+---
+
+<article class:list={['ticket', { 'ticket--emphasis': ticket.emphasis, 'ticket--compact': compact, 'ticket--parking': ticket.kind === 'parking' }]} id={compact ? undefined : ticket.id}>
+  <header class="ticket__head">
+    <p class="ticket__tag">{ticket.tagline}</p>
+    <h3 class="ticket__name">{ticket.name}</h3>
+  </header>
+  <p class="ticket__price">
+    <span class="ticket__amount">{money(ticket.price)}</span>
+    <span class="ticket__fee">{ticket.kind === 'parking' ? 'per vehicle' : 'per person'} · plus fees at checkout</span>
+  </p>
+  <p class="ticket__blurb">{ticket.blurb}</p>
+  {
+    !compact && (
+      <ul class="checklist ticket__notes">
+        {ticket.notes.map((n) => (
+          <li>{n}</li>
+        ))}
+      </ul>
+    )
+  }
+  {
+    !compact && (
+      <a class="btn btn--primary ticket__buy" href={links.tickets} target="_blank" rel="noopener">
+        Buy {ticket.kind === 'parking' ? 'Parking' : 'Tickets'} <Icon name="external" size={16} />
+      </a>
+    )
+  }
+</article>
+
+<style>
+  .ticket {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: clamp(22px, 2.6vw, 32px);
+    border-radius: var(--radius);
+  }
+
+  /* Ticket-stub notches */
+  .ticket:not(.ticket--compact)::before,
+  .ticket:not(.ticket--compact)::after {
+    content: '';
+    position: absolute;
+    top: 118px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+  }
+
+  .ticket:not(.ticket--compact)::before {
+    left: -10px;
+  }
+
+  .ticket:not(.ticket--compact)::after {
+    right: -10px;
+  }
+
+  .ticket--emphasis {
+    border-color: var(--red);
+    box-shadow: inset 0 0 0 1px rgba(199, 44, 54, 0.35);
+  }
+
+  .ticket--parking {
+    background: transparent;
+    border-style: dashed;
+  }
+
+  .ticket__tag {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 8px;
+  }
+
+  .ticket--emphasis .ticket__tag {
+    color: var(--red-text);
+  }
+
+  .ticket__name {
+    font-size: clamp(26px, 2.4vw, 32px);
+    margin: 0;
+    min-height: 2em;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .ticket--compact .ticket__name {
+    min-height: 0;
+  }
+
+  .ticket__price {
+    display: flex;
+    flex-direction: column;
+    margin: 18px 0 14px;
+    padding: 14px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .ticket__amount {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(48px, 5vw, 64px);
+    line-height: 0.9;
+    color: var(--bone);
+  }
+
+  .ticket__fee {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  .ticket__blurb {
+    color: var(--bone);
+    font-size: 16px;
+  }
+
+  .ticket--compact .ticket__blurb {
+    color: var(--muted);
+    margin-bottom: 0;
+  }
+
+  .ticket__notes {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .ticket__buy {
+    margin-top: auto;
+    width: 100%;
+  }
+</style>

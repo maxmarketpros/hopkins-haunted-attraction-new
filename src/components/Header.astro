@@ -1,0 +1,307 @@
+---
+import { getImage } from 'astro:assets';
+import logoWide from '../assets/images/logo-wide.png';
+import logoSquare from '../assets/images/logo-square.png';
+import { nav, links, business } from '../data/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  path: string;
+  overlay?: boolean;
+}
+const { path, overlay = false } = Astro.props;
+
+const wide = await getImage({ src: logoWide, width: 320, height: 161, format: 'webp' });
+const wide2x = await getImage({ src: logoWide, width: 640, height: 322, format: 'webp' });
+const square = await getImage({ src: logoSquare, width: 96, height: 96, format: 'webp' });
+const square2x = await getImage({ src: logoSquare, width: 192, height: 192, format: 'webp' });
+
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header class:list={['site-header', { 'site-header--overlay': overlay }]} id="site-header">
+  <div class="container site-header__inner">
+    <a href="/" class="brand" aria-label={`${business.name} – Home`}>
+      <picture>
+        <source media="(max-width: 719px)" srcset={`${square.src} 1x, ${square2x.src} 2x`} width="48" height="48" />
+        <img
+          src={wide.src}
+          srcset={`${wide.src} 1x, ${wide2x.src} 2x`}
+          width="115"
+          height="58"
+          alt=""
+          decoding="async"
+          fetchpriority="high"
+        />
+      </picture>
+    </a>
+
+    <nav class="site-nav" aria-label="Primary">
+      <ul class="clean site-nav__list">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <a class="btn btn--primary btn--sm site-header__buy" href={links.tickets} target="_blank" rel="noopener" aria-label="Buy Tickets">
+        <span class="site-header__buy-long" aria-hidden="true">Buy Tickets</span>
+        <span class="site-header__buy-short" aria-hidden="true">Tickets</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+        <Icon name="menu" />
+        <span class="visually-hidden">Open menu</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <div class="mobile-menu__top container">
+      <span class="label label--plain">Hopkins Haunted Attraction</span>
+      <button class="menu-close" type="button">
+        <Icon name="close" />
+        <span class="visually-hidden">Close menu</span>
+      </button>
+    </div>
+    <nav class="container" aria-label="Mobile">
+      <ul class="clean mobile-menu__list">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="btn btn--primary mobile-menu__buy" href={links.tickets} target="_blank" rel="noopener">
+        Buy Tickets <Icon name="external" size={18} />
+      </a>
+      <p class="mobile-menu__meta">
+        <a href={links.phone}>{business.phoneDisplay}</a><br />
+        {business.address.street} {business.address.city}, {business.address.region} {business.address.postal}
+      </p>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: var(--header-h);
+    background: rgba(8, 10, 9, 0.96);
+    border-bottom: 1px solid var(--rule);
+    transition:
+      background-color 250ms,
+      border-color 250ms;
+  }
+
+  .site-header--overlay {
+    position: fixed;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to bottom, rgba(8, 10, 9, 0.82), rgba(8, 10, 9, 0.35) 70%, rgba(8, 10, 9, 0));
+    border-bottom-color: transparent;
+  }
+
+  .site-header--overlay.is-scrolled {
+    background: rgba(8, 10, 9, 0.96);
+    border-bottom-color: var(--rule);
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    .site-header.is-scrolled,
+    .site-header:not(.site-header--overlay) {
+      background: rgba(8, 10, 9, 0.86);
+      backdrop-filter: blur(12px);
+    }
+  }
+
+  .site-header__inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .brand {
+    display: block;
+    flex: none;
+  }
+
+  .brand img {
+    height: 58px;
+    width: auto;
+  }
+
+  @media (max-width: 719px) {
+    .brand img {
+      height: 48px;
+      width: 48px;
+    }
+  }
+
+  .site-nav {
+    margin-left: auto;
+    display: none;
+  }
+
+  .site-nav__list {
+    display: flex;
+    gap: clamp(18px, 2.4vw, 34px);
+  }
+
+  .site-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 500;
+    font-size: 15.5px;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: var(--bone);
+    position: relative;
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 4px;
+    height: 2px;
+    background: var(--red-hi);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 200ms var(--ease);
+  }
+
+  .site-nav a:hover::after,
+  .site-nav a[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  .site-header__actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @media (min-width: 900px) {
+    .site-nav {
+      display: block;
+    }
+    .site-header__actions {
+      margin-left: 0;
+    }
+  }
+
+  .site-header__buy-short {
+    display: none;
+  }
+
+  @media (max-width: 479px) {
+    .site-header__buy-long {
+      display: none;
+    }
+    .site-header__buy-short {
+      display: inline;
+    }
+  }
+
+  .menu-toggle,
+  .menu-close {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 1px solid var(--rule-strong);
+    color: var(--bone);
+    cursor: pointer;
+    border-radius: var(--radius);
+  }
+
+  @media (min-width: 900px) {
+    .menu-toggle {
+      display: none;
+    }
+  }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--bg);
+    overflow-y: auto;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .mobile-menu[hidden] {
+    display: none;
+  }
+
+  .mobile-menu__top {
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .mobile-menu__top .label {
+    margin: 0;
+  }
+
+  .mobile-menu__list {
+    padding-top: 12px;
+  }
+
+  .mobile-menu__list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 34px;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .mobile-menu__list a[aria-current='page'] {
+    color: var(--red-hi);
+  }
+
+  .mobile-menu__list a[aria-current='page']::after {
+    content: 'Current';
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+  }
+
+  .mobile-menu__buy {
+    width: 100%;
+    margin-top: 28px;
+  }
+
+  .mobile-menu__meta {
+    margin-top: 28px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+</style>

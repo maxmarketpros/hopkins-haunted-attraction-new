@@ -1,0 +1,58 @@
+---
+import type { FaqGroup } from '../data/site';
+
+interface Props {
+  groups: FaqGroup[];
+}
+const { groups } = Astro.props;
+---
+
+<div class="faq">
+  {
+    groups.map((group) => (
+      <section class="faq__group" id={`faq-${group.id}`} aria-labelledby={`faq-${group.id}-h`}>
+        <h3 class="faq__group-title" id={`faq-${group.id}-h`}>
+          {group.title}
+        </h3>
+        <div class="faq__items">
+          {group.items.map((item) => (
+            <details class="faq-item" id={item.id}>
+              <summary>
+                <span>{item.q}</span>
+              </summary>
+              <div class="faq-a">
+                <p>{item.a}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .faq {
+    display: grid;
+    gap: clamp(36px, 5vw, 64px);
+  }
+
+  .faq__group {
+    display: grid;
+    gap: 12px;
+  }
+
+  @media (min-width: 900px) {
+    .faq__group {
+      grid-template-columns: 260px 1fr;
+      gap: 40px;
+    }
+  }
+
+  .faq__group-title {
+    font-size: 28px;
+    color: var(--muted);
+    margin: 0;
+    padding-top: 18px;
+  }
+</style>

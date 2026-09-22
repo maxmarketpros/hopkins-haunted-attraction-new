@@ -1,0 +1,112 @@
+# Netlify hosting configuration.
+# Build: `npm run build` -> `dist/`. Node 22 is required by Astro 7.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# ---------------------------------------------------------------------
+# Permanent redirects from the previous Wix site structure.
+# Netlify normalises trailing slashes before matching, so one rule per
+# old path covers both `/path` and `/path/`. Fragments (#trailer etc.) are
+# passed through in the Location header; each destination page also has an
+# in-page "jump to" link as a fallback.
+# ---------------------------------------------------------------------
+
+[[redirects]]
+  from = "/about-hopkins-haunted-attraction"
+  to = "/experience/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/hopkins-haunted-attraction-trailer"
+  to = "/experience/#trailer"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/hopkins-haunted-attraction-characters"
+  to = "/experience/#characters"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/frequently-asked-questions"
+  to = "/plan-your-visit/#faq"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/entertainment-jobs-in-greenville-county"
+  to = "/join-the-crew/"
+  status = 301
+  force = true
+
+# Old blog: only genuinely equivalent articles are redirected.
+[[redirects]]
+  from = "/post/exciting-seasonal-entertainment-jobs-in-greenville-county-for-theatrical-students-and-enthusiastic-a"
+  to = "/join-the-crew/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/post/experience-the-thrills-of-hopkins-haunted-attraction"
+  to = "/experience/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/post/join-the-chilling-story-at-hopkins-haunted-attraction"
+  to = "/experience/"
+  status = 301
+  force = true
+
+# Removed content with no equivalent: return 410 Gone (served by the 404 page).
+[[redirects]]
+  from = "/post/discover-simpsonville-s-1800s-haunted-adventure"
+  to = "/404.html"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/blog"
+  to = "/404.html"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/blog/*"
+  to = "/404.html"
+  status = 410
+  force = true
+
+# ---------------------------------------------------------------------
+# Caching and security headers
+# ---------------------------------------------------------------------
+
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/video/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

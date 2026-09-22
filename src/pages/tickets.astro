@@ -1,0 +1,323 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import TicketPanel from '../components/TicketPanel.astro';
+import Schedule from '../components/Schedule.astro';
+import Icon from '../components/Icon.astro';
+import {
+  business,
+  links,
+  season,
+  admissionTickets,
+  parkingTicket,
+  money,
+  datesSentence,
+  feesNote,
+  lowestAdmission,
+} from '../data/site';
+---
+
+<Base
+  title={`${season.year} Tickets & Dates | Hopkins Haunted Attraction`}
+  description={`${season.year} operating nights (${datesSentence}), hours ${season.hoursLine}, and admission for Hopkins Haunted Attraction in Simpsonville, SC: Haunt Pass ${money(admissionTickets[0].price)}, Touch Pass ${money(admissionTickets[1].price)}, Kids 10 & under ${money(admissionTickets[2].price)}. VIP parking ${money(parkingTicket.price)}.`}
+  path="/tickets/"
+  breadcrumbs={[{ name: 'Tickets & Dates', path: '/tickets/' }]}
+>
+  <PageIntro
+    label={`${season.year} Season · ${business.address.city}, ${business.address.region}`}
+    title={`${season.year} Tickets`}
+    titleAccent="& Dates"
+    lede={`Admission from ${money(lowestAdmission)}. Open ${datesSentence}, ${season.hoursLine}. Tickets are sold online through FearTicket and at the ticket booth on site.`}
+    compact
+  >
+    <div class="intro-actions">
+      <a id="primary-cta" class="btn btn--primary" href={links.tickets} target="_blank" rel="noopener">
+        Buy Tickets <Icon name="external" size={18} />
+      </a>
+      <a class="btn btn--outline" href="#dates">See operating nights</a>
+    </div>
+  </PageIntro>
+
+  <!-- A. Ticket comparison -->
+  <section class="section section--sm" id="admission" aria-labelledby="admission-h">
+    <div class="container">
+      <div class="sec-head reveal">
+        <p class="label">Admission</p>
+        <h2 id="admission-h">Choose your pass</h2>
+        <p class="muted">{feesNote} Every pass is for one person and one operating night.</p>
+      </div>
+      <div class="tickets-grid">
+        {admissionTickets.map((t) => <div class="reveal"><TicketPanel ticket={t} /></div>)}
+      </div>
+
+      <div class="parking reveal" id={parkingTicket.id}>
+        <div class="parking__copy">
+          <p class="label">Optional Parking</p>
+          <h3>Parking is separate from admission</h3>
+          <p class="muted">
+            General parking is free. A {parkingTicket.name} lets one vehicle park closer to the entrance. It is not an
+            attraction ticket, and it doesn’t reduce or replace admission.
+          </p>
+        </div>
+        <TicketPanel ticket={parkingTicket} />
+      </div>
+    </div>
+  </section>
+
+  <!-- B. Operating-night schedule -->
+  <section class="section section--surface" id="dates" aria-labelledby="dates-h">
+    <div class="container">
+      <div class="sec-head reveal">
+        <p class="label">Operating Nights</p>
+        <h2 id="dates-h">{season.year} dates</h2>
+        <p class="muted">
+          Nine nights across four weekends. Choose your night at checkout; the calendar below is for planning.
+        </p>
+      </div>
+      <div class="reveal">
+        <Schedule />
+      </div>
+    </div>
+  </section>
+
+  <!-- C. Touch Pass explanation -->
+  <section class="section section--sm" id="touch-pass" aria-labelledby="touch-h">
+    <div class="container touch">
+      <div class="reveal">
+        <p class="label">The Touch Pass</p>
+        <h2 id="touch-h">Optional, and always your call</h2>
+      </div>
+      <div class="touch__body reveal">
+        <p>
+          With a standard Haunt Pass, actors will not touch you. The Haunt Touch Pass permits actors to touch you in a
+          safe but startling way for a more intense, interactive trail.
+        </p>
+        <ol class="steps">
+          <li><strong>Collect your necklace.</strong> Touch Pass holders pick up a glow necklace at the ticket booth on arrival.</li>
+          <li><strong>Keep it visible.</strong> The necklace must be worn and clearly visible for the whole attraction. No glow necklace, no touching.</li>
+          <li><strong>Opt out any time.</strong> Remove the necklace and tell a staff member. Actors should no longer intentionally engage you under the Touch Pass.</li>
+        </ol>
+        <p class="muted">
+          More in <a href="/plan-your-visit/#faq-tickets">the Touch Pass FAQs</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- D. Before purchasing -->
+  <section class="section section--sm section--surface" id="before-you-buy" aria-labelledby="before-h">
+    <div class="container">
+      <div class="sec-head reveal">
+        <p class="label">Before You Buy</p>
+        <h2 id="before-h">Good to know</h2>
+      </div>
+      <dl class="facts reveal">
+        <div class="facts__row">
+          <dt>Age &amp; intensity</dt>
+          <dd>
+            This is a PG-13 haunted attraction designed to scare: live scare actors, darkness, loud noises, flashing
+            lights, fog effects, frightening scenes and sudden scares. Children 10 and under need a Kids Pass and must
+            be accompanied by a responsible adult. Parental discretion is strongly advised.
+          </dd>
+        </div>
+        <div class="facts__row">
+          <dt>Fees</dt>
+          <dd>{feesNote} The checkout shows the fee for each product before you pay.</dd>
+        </div>
+        <div class="facts__row">
+          <dt>Parking</dt>
+          <dd>
+            General parking is free and accessible parking is available. The {money(parkingTicket.price)} VIP Parking Pass
+            is a per-vehicle add-on for closer parking and never includes admission.
+          </dd>
+        </div>
+        <div class="facts__row">
+          <dt>Buying on site</dt>
+          <dd>A ticket booth is open on operating nights. Buying online lets you skip the line.</dd>
+        </div>
+        <div class="facts__row">
+          <dt>Refunds &amp; transfers</dt>
+          <dd>
+            All ticket sales are final and non-refundable. If you can’t attend, you may transfer your ticket to another
+            guest or use it on a different operating night, based on availability. If the venue fully cancels a night
+            due to severe weather or unforeseen circumstances, ticket holders can transfer to another available date or
+            receive a full refund. No refunds for no-shows, long wait times, or for fear or choosing not to finish.{' '}
+            <a href={links.ticketPolicy} target="_blank" rel="noopener">Read the full policy on the checkout site.</a>
+          </dd>
+        </div>
+        <div class="facts__row">
+          <dt>Weather</dt>
+          <dd>
+            The trail is outdoors and runs in most weather. Severe weather updates are posted on the attraction’s official
+            channels.
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- E. Checkout -->
+  <section class="section checkout" aria-labelledby="checkout-h">
+    <div class="container checkout__inner reveal">
+      <p class="label">Checkout</p>
+      <h2 id="checkout-h">Ready when you are</h2>
+      <p class="muted">
+        Tickets, Touch Passes and VIP parking are all sold through FearTicket, which also handles your waiver. Questions
+        first? Call <a href={links.phone}>{business.phoneDisplay}</a>.
+      </p>
+      <a class="btn btn--primary checkout__btn" href={links.tickets} target="_blank" rel="noopener">
+        Buy Tickets on FearTicket <Icon name="external" size={18} />
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .sec-head {
+    margin-bottom: clamp(24px, 3vw, 40px);
+  }
+
+  .sec-head h2 {
+    margin-bottom: 0.3em;
+  }
+
+  .sec-head p {
+    margin: 0;
+  }
+
+  .tickets-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  @media (min-width: 900px) {
+    .tickets-grid {
+      grid-template-columns: repeat(3, 1fr);
+      align-items: stretch;
+    }
+    .tickets-grid > div {
+      display: grid;
+    }
+  }
+
+  .parking {
+    display: grid;
+    gap: 24px;
+    margin-top: clamp(32px, 5vw, 64px);
+    padding-top: clamp(28px, 4vw, 48px);
+    border-top: 1px solid var(--rule);
+  }
+
+  @media (min-width: 900px) {
+    .parking {
+      grid-template-columns: 1.3fr 1fr;
+      align-items: start;
+    }
+  }
+
+  .parking__copy h3 {
+    max-width: 16ch;
+  }
+
+  .touch {
+    display: grid;
+    gap: 24px;
+  }
+
+  @media (min-width: 900px) {
+    .touch {
+      grid-template-columns: 5fr 7fr;
+    }
+  }
+
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.2em;
+    display: grid;
+    gap: 14px;
+  }
+
+  .steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 56px;
+    max-width: 62ch;
+  }
+
+  .steps li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: -2px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 30px;
+    color: var(--red-hi);
+    line-height: 1;
+  }
+
+  .facts {
+    margin: 0;
+    display: grid;
+  }
+
+  .facts__row {
+    display: grid;
+    gap: 6px;
+    padding: 20px 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .facts__row:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (min-width: 720px) {
+    .facts__row {
+      grid-template-columns: 220px 1fr;
+      gap: 32px;
+    }
+  }
+
+  .facts dt {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1.05;
+  }
+
+  .facts dd {
+    margin: 0;
+    color: var(--muted);
+    max-width: 70ch;
+  }
+
+  .checkout {
+    background: radial-gradient(60% 80% at 50% 100%, rgba(165, 29, 37, 0.22), transparent 70%), var(--bg);
+    text-align: center;
+  }
+
+  .checkout__inner {
+    display: grid;
+    justify-items: center;
+  }
+
+  .checkout__inner p {
+    max-width: 52ch;
+  }
+
+  .checkout__btn {
+    margin-top: 8px;
+  }
+</style>

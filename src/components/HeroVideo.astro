@@ -1,0 +1,249 @@
+---
+/**
+ * Homepage hero using the original site's background video (same file as the
+ * trailer). Autoplays muted, loops, plays inline. The still frame (from the
+ * same footage) is shown until playback starts, for reduced-motion users, on
+ * constrained connections, or when autoplay is blocked.
+ */
+import { Image } from 'astro:assets';
+import still from '../assets/images/hero-still.jpg';
+import Icon from './Icon.astro';
+import { links, business, datesInline, season } from '../data/site';
+---
+
+<section class="hero hero-video" data-state="loading" aria-labelledby="hero-title">
+  <div class="hero__media" aria-hidden="true">
+    <Image
+      src={still}
+      alt=""
+      class="hero__still"
+      width={1440}
+      height={1080}
+      layout="full-width"
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+    <video
+      class="hero__video"
+      muted
+      playsinline
+      loop
+      preload="none"
+      poster="/video/poster.jpg"
+      data-src720="/video/hero-bg-720.mp4"
+      data-src480="/video/hero-bg-480.mp4"
+      tabindex="-1"
+      disablepictureinpicture
+    ></video>
+    <div class="hero__overlay"></div>
+  </div>
+
+  <div class="container hero__content">
+    <p class="label">
+      {business.address.city}, {business.address.region} · {business.address.county} · {season.year} Season
+    </p>
+    <h1 id="hero-title">
+      Enter the<br />
+      Sinister <span class="accent">Woods.</span>
+    </h1>
+    <p class="lede hero__lede">
+      An outdoor, walk-through haunted trail of live actors, sets and effects, set in the sinister woods of the 1800s
+      at {business.venue} in {business.address.city}, {business.address.regionLong}.
+    </p>
+    <div class="hero__actions">
+      <a id="primary-cta" class="btn btn--primary" href={links.tickets} target="_blank" rel="noopener">
+        Buy Tickets <Icon name="external" size={18} />
+      </a>
+      <a class="btn btn--ghost" href="/experience/#trailer" data-trailer-open>
+        <Icon name="play" size={20} /> Watch Trailer
+      </a>
+    </div>
+    <p class="hero__dates">
+      <span>{datesInline}</span>
+      <span class="hero__dates-sep" aria-hidden="true">—</span>
+      <span>{season.hoursLine}</span>
+    </p>
+  </div>
+
+  <button class="video-toggle" type="button" aria-pressed="false" aria-label="Pause background video">
+    <Icon name="pause" class="video-toggle__pause" />
+    <Icon name="play" class="video-toggle__play" />
+  </button>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-items: end;
+    min-height: min(100svh, 960px);
+    padding-top: calc(var(--header-h) + 40px);
+    padding-bottom: clamp(56px, 8vw, 96px);
+    overflow: hidden;
+    background: var(--bg);
+  }
+
+  @media (max-width: 719px) {
+    .hero {
+      min-height: 0;
+      padding-top: calc(var(--header-h) + 56px);
+      padding-bottom: 40px;
+    }
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--bg);
+  }
+
+  .hero__still,
+  .hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 42.6% 44.6%;
+  }
+
+  .hero__still {
+    filter: saturate(0.9);
+  }
+
+  .hero__video {
+    opacity: 0;
+    transition: opacity 700ms ease;
+  }
+
+  .hero-video[data-state='playing'] .hero__video {
+    opacity: 1;
+  }
+
+  @media (max-width: 719px) {
+    .hero__still,
+    .hero__video {
+      object-position: 48% 40%;
+    }
+  }
+
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to right, rgba(8, 10, 9, 0.88) 0%, rgba(8, 10, 9, 0.62) 38%, rgba(8, 10, 9, 0.15) 70%, rgba(8, 10, 9, 0.05) 100%),
+      linear-gradient(to top, var(--bg) 0%, rgba(8, 10, 9, 0.35) 30%, rgba(8, 10, 9, 0) 55%),
+      linear-gradient(to bottom, rgba(8, 10, 9, 0.55), rgba(8, 10, 9, 0) 30%);
+  }
+
+  @media (max-width: 719px) {
+    .hero__overlay {
+      background:
+        linear-gradient(to top, var(--bg) 0%, rgba(8, 10, 9, 0.7) 45%, rgba(8, 10, 9, 0.2) 80%),
+        linear-gradient(to bottom, rgba(8, 10, 9, 0.6), rgba(8, 10, 9, 0) 35%);
+    }
+  }
+
+  .hero__content {
+    position: relative;
+    max-width: var(--container);
+  }
+
+  .hero h1 {
+    margin-bottom: 0.3em;
+    max-width: 8ch;
+    text-shadow: 0 2px 30px rgba(0, 0, 0, 0.45);
+  }
+
+  .hero__lede {
+    max-width: 44ch;
+    color: var(--bone);
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 28px 0 24px;
+  }
+
+  @media (max-width: 479px) {
+    .hero__actions .btn {
+      flex: 1 1 100%;
+    }
+  }
+
+  .hero__dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bone);
+    margin: 0;
+  }
+
+  .hero__dates-sep {
+    color: var(--red-hi);
+  }
+
+  @media (max-width: 719px) {
+    .hero__dates {
+      padding-right: 72px;
+    }
+  }
+
+  .video-toggle {
+    position: absolute;
+    right: max(var(--gutter), env(safe-area-inset-right));
+    bottom: clamp(20px, 3vw, 36px);
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    background: rgba(8, 10, 9, 0.6);
+    border: 1px solid var(--rule-strong);
+    color: var(--bone);
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 2;
+  }
+
+  .video-toggle:hover {
+    border-color: var(--bone);
+  }
+
+  .video-toggle svg {
+    width: 22px;
+    height: 22px;
+    grid-area: 1 / 1;
+  }
+
+  .video-toggle .video-toggle__play,
+  .video-toggle.is-playing .video-toggle__pause {
+    display: block;
+  }
+
+  .video-toggle .video-toggle__pause,
+  .video-toggle.is-playing .video-toggle__play {
+    display: none;
+  }
+
+  /* Without JS the still image is the hero. Hide the toggle. */
+  html:not(.js) .video-toggle {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__video {
+      transition: none;
+    }
+  }
+</style>

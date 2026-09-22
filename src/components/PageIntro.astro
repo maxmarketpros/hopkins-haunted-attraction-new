@@ -1,0 +1,53 @@
+---
+/**
+ * Compact interior page opener: chapter label, H1, lede, optional actions slot.
+ */
+interface Props {
+  label: string;
+  title: string;
+  titleAccent?: string;
+  lede?: string;
+  compact?: boolean;
+}
+const { label, title, titleAccent, lede, compact = false } = Astro.props;
+---
+
+<section class:list={['page-intro', { 'page-intro--compact': compact }]}>
+  <div class="container">
+    <p class="label">{label}</p>
+    <h1>
+      {title}
+      {titleAccent && (
+        <>
+          {' '}
+          <span class="accent">{titleAccent}</span>
+        </>
+      )}
+    </h1>
+    {lede && <p class="lede page-intro__lede">{lede}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .page-intro {
+    padding-top: clamp(40px, 6vw, 88px);
+    padding-bottom: clamp(32px, 4vw, 56px);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .page-intro--compact {
+    padding-top: clamp(32px, 4vw, 56px);
+  }
+
+  .page-intro h1 {
+    font-size: clamp(48px, 7.5vw, 112px);
+    margin-bottom: 0.25em;
+    max-width: 12ch;
+  }
+
+  .page-intro__lede {
+    max-width: 58ch;
+    color: var(--muted);
+  }
+</style>

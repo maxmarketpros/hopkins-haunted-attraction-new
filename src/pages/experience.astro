@@ -1,0 +1,561 @@
+---
+import { Picture, Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import CharacterCard from '../components/CharacterCard.astro';
+import Lightbox from '../components/Lightbox.astro';
+import Icon from '../components/Icon.astro';
+import ensemble from '../assets/images/ensemble-scene.jpg';
+import jollySquare from '../assets/images/jolly-square.png';
+import cover from '../assets/images/website-cover.jpg';
+import wideArt from '../assets/images/wide-artwork-address.jpg';
+import still from '../assets/images/hero-still.jpg';
+import handprint from '../assets/images/handprint.png';
+import { business, links, characters, admissionTickets, money, season } from '../data/site';
+
+const trailerPoster = await getImage({ src: still, width: 960, height: 720, format: 'jpg' });
+
+const gallery = [
+  {
+    src: cover,
+    alt: 'Hopkins Haunted Attraction cover artwork: a red handprint and the distressed wordmark over a foggy forest road, flanked by a blurred, screaming figure and a masked figure in a top hat holding a chainsaw.',
+    caption: 'Website cover artwork',
+    ratio: '7 / 2',
+  },
+  {
+    src: wideArt,
+    alt: 'Alternate wide artwork with the wordmark, the address 3717 Fork Shoals Rd., Simpsonville, SC 29680, and the AVL Solutions pro audio, video and lighting mark.',
+    caption: 'Promotional artwork with venue address (includes the AVL Solutions mark as designed)',
+    ratio: '5 / 2',
+  },
+  {
+    src: ensemble,
+    alt: 'Ensemble artwork: a jester, a bat-wielding clown, a ragged youth and a hooded figure on a rusted playground frame in moonlit woods.',
+    caption: 'Ensemble artwork',
+    ratio: '3 / 4',
+  },
+  {
+    src: still,
+    alt: 'A frame from the trailer: a cracked, hollow-eyed mask lit from below.',
+    caption: 'From the trailer',
+    ratio: '4 / 3',
+  },
+];
+const galleryFull = await Promise.all(gallery.map((g) => getImage({ src: g.src, width: Math.min(1600, g.src.width), format: 'webp' })));
+const standard = admissionTickets.find((t) => t.id === 'haunt-pass')!;
+const touch = admissionTickets.find((t) => t.id === 'haunt-touch-pass')!;
+---
+
+<Base
+  title="The Haunted Trail Experience | Hopkins Haunted Attraction"
+  description={`What to expect on the Hopkins Haunted Attraction trail in Simpsonville, SC: the 1800s woods setting, live actors and sets, the official trailer, all eight characters, artwork, and the Haunt Pass vs. Touch Pass difference.`}
+  path="/experience/"
+  breadcrumbs={[{ name: 'The Experience', path: '/experience/' }]}
+>
+  <!-- A. Interior hero -->
+  <section class="xhero" aria-labelledby="xhero-title">
+    <div class="xhero__media media" aria-hidden="true">
+      <Picture
+        src={ensemble}
+        alt=""
+        formats={['avif', 'webp']}
+        width={1086}
+        height={1448}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <div class="xhero__overlay"></div>
+    </div>
+    <div class="container xhero__content">
+      <p class="label">The Experience · {business.address.city}, {business.address.region}</p>
+      <h1 id="xhero-title">Into the<br />sinister <span class="accent">woods</span></h1>
+      <p class="lede xhero__lede">
+        An outdoor walk-through haunted trail on {business.venue}. Roughly 30 minutes of darkness, live performers,
+        built sets and effects, staged in the woods of the 1800s.
+      </p>
+      <nav class="jump" aria-label="On this page">
+        <a href="#story">Story</a>
+        <a href="#trailer">Trailer</a>
+        <a href="#characters">Characters</a>
+        <a href="#gallery">Artwork</a>
+        <a href="#options">Haunt Pass vs. Touch Pass</a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- B. Story and atmosphere -->
+  <section class="section story" id="story" aria-labelledby="story-title">
+    <div class="container">
+      <div class="story__row reveal">
+        <div class="story__copy">
+          <p class="label">The Setting</p>
+          <h2 id="story-title">The woods of the 1800s</h2>
+          <p>
+            The trail winds through the woods of {business.venue} in {business.address.city}. The story is set in the
+            sinister woods of the 1800s, and the deeper you go, the closer you get to the nightmare. Expect natural,
+            uneven ground, darkness, fog, loud noises, flashing lights and sudden scares.
+          </p>
+          <p class="muted">
+            Most groups take about 30 minutes to walk it. How long it takes depends on how fast your group moves.
+          </p>
+        </div>
+        <figure class="story__media media hover-scale">
+          <Picture
+            src={jollySquare}
+            alt="Octagonal sepia portrait of Jolly, a doll-like figure in a torn dress and pigtails, seated in a rocking chair holding a doll."
+            formats={['avif', 'webp']}
+            width={500}
+            height={500}
+            sizes="(min-width: 900px) 34vw, 70vw"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      </div>
+
+      <div class="story__row story__row--flip reveal">
+        <div class="story__copy">
+          <p class="label">The Production</p>
+          <h2>Built like a film, played live</h2>
+          <p>
+            Hopkins is built as cinematic storytelling on the farm: realistic sets, professional actors and creative
+            special effects that move from psychological terror to gruesome scenes straight out of a nightmare. At
+            Hopkins you don’t just watch the story unfold. You become part of it.
+          </p>
+          <p class="muted">
+            Actors will not touch you unless you choose the Touch Pass. <a href="#options">See how the two passes differ.</a>
+          </p>
+        </div>
+        <figure class="story__media story__media--wide media hover-scale">
+          <Picture
+            src={still}
+            alt="A frame from the trailer: a cracked, hollow-eyed mask lit from below."
+            formats={['avif', 'webp']}
+            width={960}
+            height={720}
+            sizes="(min-width: 900px) 42vw, 100vw"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      </div>
+
+      <div class="story__band reveal">
+        <Image src={handprint} alt="" class="handprint story__hand" width={220} height={350} loading="lazy" />
+        <p class="label">Local Roots</p>
+        <h2>Made in {business.address.county}</h2>
+        <p class="lede">
+          Hopkins Haunted Attraction has been scaring the Upstate from {business.address.city} since{' '}
+          {business.established}. It is a local production, built and performed by people from the area, and part of
+          how {business.address.county} does October. Locals, and plenty of visitors from Georgia and North Carolina,
+          come back every season.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. Full trailer -->
+  <section class="section section--surface trailer" id="trailer" aria-labelledby="trailer-h">
+    <div class="container">
+      <div class="trailer__head reveal">
+        <p class="label">Official Trailer</p>
+        <h2 id="trailer-h">Watch the trailer</h2>
+        <p class="muted">The original trailer, shown in its full 4:3 frame. Sound plays when you press play.</p>
+      </div>
+      <div class="trailer__player reveal" data-hide-ticket-bar>
+        <video
+          controls
+          playsinline
+          preload="metadata"
+          poster={trailerPoster.src}
+          width="960"
+          height="720"
+          src="/video/trailer-720.mp4"
+        >
+          Your browser can’t play this video. <a href="/video/trailer-720.mp4">Download the trailer (MP4)</a>.
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- D. Meet the characters -->
+  <section class="section cast" id="characters" aria-labelledby="cast-h">
+    <div class="container">
+      <div class="cast__head reveal">
+        <p class="label">The Characters</p>
+        <h2 id="cast-h">Meet the cast</h2>
+        <p class="muted">All eight characters currently walking the trail. Select a portrait to view it larger.</p>
+      </div>
+      <ul class="clean cast__grid">
+        {
+          characters.map((c) => (
+            <li class="reveal">
+              <CharacterCard character={c} lightbox sizes="(min-width: 1024px) 22vw, 45vw" />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- E. Scenes and artwork -->
+  <section class="section section--surface gallery" id="gallery" aria-labelledby="gallery-h">
+    <div class="container">
+      <div class="gallery__head reveal">
+        <p class="label">Scenes &amp; Artwork</p>
+        <h2 id="gallery-h">Promotional artwork</h2>
+        <p class="muted">
+          Illustrations and campaign art from the attraction. These are promotional pieces, not photographs of the
+          trail itself. Select any image to see it in full.
+        </p>
+      </div>
+      <ul class="clean gallery__grid">
+        {
+          gallery.map((g, i) => (
+            <li class:list={['gallery__item', `gallery__item--${i + 1}`, 'reveal']}>
+              <figure class="gallery__fig">
+                <button
+                  type="button"
+                  class="gallery__btn media hover-scale"
+                  style={`aspect-ratio:${g.ratio}`}
+                  data-lightbox={galleryFull[i].src}
+                  data-alt={g.alt}
+                  data-caption={g.caption}
+                >
+                  <Picture
+                    src={g.src}
+                    alt={g.alt}
+                    formats={['avif', 'webp']}
+                    width={Math.min(1400, g.src.width)}
+                    height={Math.round((Math.min(1400, g.src.width) * g.src.height) / g.src.width)}
+                    sizes={i < 2 ? '(min-width: 1280px) 1200px, 100vw' : '(min-width: 900px) 45vw, 100vw'}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span class="visually-hidden">View full image</span>
+                </button>
+                <figcaption class="gallery__cap">{g.caption}</figcaption>
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- F. Experience options -->
+  <section class="section options" id="options" aria-labelledby="options-h">
+    <div class="container">
+      <div class="options__head reveal">
+        <p class="label">Two Ways In</p>
+        <h2 id="options-h">Haunt Pass or Touch Pass?</h2>
+      </div>
+      <div class="options__grid">
+        <div class="options__card reveal">
+          <h3>{standard.name} <span class="options__price">{money(standard.price)}</span></h3>
+          <p>{standard.blurb}</p>
+        </div>
+        <div class="options__card options__card--touch reveal">
+          <h3>{touch.name} <span class="options__price">{money(touch.price)}</span></h3>
+          <p>
+            For those who want the ultimate thrill. By choosing the Touch Pass you are permitting actors to touch you
+            in a safe but startling way.
+          </p>
+          <ul class="checklist">
+            <li>Pick up your glow necklace at the ticket booth when you arrive.</li>
+            <li>Wear it clearly visible for the whole trail. No glow necklace, no touching.</li>
+            <li>Changed your mind? Remove the necklace and tell a staff member. Actors should no longer engage you.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="muted options__note">
+        Prices are base prices; fees apply at checkout. Both passes are admission products. See{' '}
+        <a href="/tickets/">Tickets &amp; Dates</a> for the full breakdown and{' '}
+        <a href="/plan-your-visit/#faq-tickets">the Touch Pass FAQs</a>.
+      </p>
+      <div class="options__actions reveal">
+        <a class="btn btn--primary" href={links.tickets} target="_blank" rel="noopener">
+          Buy Tickets <Icon name="external" size={18} />
+        </a>
+        <a class="btn btn--outline" href="/tickets/">Tickets &amp; Dates</a>
+      </div>
+      <p class="muted options__season">{season.year} nights: October 16–17, 23–25, 29–31 and November 1 · {season.hoursLine}</p>
+    </div>
+  </section>
+
+  <Lightbox slot="after-footer" />
+</Base>
+
+<style>
+  /* Interior hero */
+  .xhero {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-items: end;
+    min-height: min(78vh, 780px);
+    padding-block: clamp(56px, 8vw, 96px);
+    overflow: hidden;
+  }
+
+  .xhero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .xhero__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% 28%;
+  }
+
+  .xhero__overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to right, rgba(8, 10, 9, 0.9) 0%, rgba(8, 10, 9, 0.55) 45%, rgba(8, 10, 9, 0.1) 100%),
+      linear-gradient(to top, var(--bg), rgba(8, 10, 9, 0) 45%);
+  }
+
+  .xhero h1 {
+    max-width: 9ch;
+    margin-bottom: 0.3em;
+  }
+
+  .xhero__lede {
+    max-width: 46ch;
+  }
+
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .jump a {
+    text-decoration: none;
+    border-bottom: 2px solid var(--red);
+    padding: 6px 0;
+    min-height: 32px;
+  }
+
+  .jump a:hover {
+    color: var(--red-hi);
+  }
+
+  /* Story */
+  .story__row {
+    display: grid;
+    gap: clamp(24px, 4vw, 64px);
+    align-items: center;
+    padding-block: clamp(24px, 4vw, 56px);
+  }
+
+  @media (min-width: 900px) {
+    .story__row {
+      grid-template-columns: 7fr 5fr;
+    }
+    .story__row--flip {
+      grid-template-columns: 5fr 7fr;
+    }
+    .story__row--flip .story__copy {
+      order: 2;
+    }
+  }
+
+  .story__copy h2 {
+    max-width: 12ch;
+  }
+
+  .story__media {
+    margin: 0;
+    aspect-ratio: 1;
+    max-width: 480px;
+    justify-self: center;
+    background: transparent;
+  }
+
+  .story__media--wide {
+    aspect-ratio: 4 / 3;
+    max-width: none;
+    justify-self: stretch;
+  }
+
+  .story__band {
+    position: relative;
+    margin-top: clamp(24px, 4vw, 56px);
+    padding: clamp(32px, 5vw, 72px) clamp(20px, 4vw, 64px);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    overflow: hidden;
+  }
+
+  .story__band .lede {
+    max-width: 62ch;
+  }
+
+  .story__hand {
+    right: 3%;
+    top: 10%;
+    transform: rotate(10deg);
+  }
+
+  /* Trailer */
+  .trailer__head {
+    margin-bottom: clamp(20px, 3vw, 36px);
+  }
+
+  .trailer__player {
+    width: min(100%, 1024px);
+    aspect-ratio: 4 / 3;
+    background: #000;
+    border: 1px solid var(--rule);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  }
+
+  .trailer__player video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Cast */
+  .cast__head,
+  .gallery__head,
+  .options__head {
+    margin-bottom: clamp(28px, 4vw, 56px);
+  }
+
+  .cast__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(14px, 2vw, 28px) clamp(14px, 2vw, 24px);
+  }
+
+  @media (min-width: 720px) {
+    .cast__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .cast__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* Gallery */
+  .gallery__grid {
+    display: grid;
+    gap: clamp(16px, 2.5vw, 32px);
+  }
+
+  @media (min-width: 900px) {
+    .gallery__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .gallery__item--1,
+    .gallery__item--2 {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .gallery__fig {
+    margin: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .gallery__btn {
+    width: 100%;
+    padding: 0;
+    border: 1px solid var(--rule);
+    cursor: zoom-in;
+    display: block;
+    border-radius: 4px;
+  }
+
+  .gallery__btn :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gallery__cap {
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  /* Options */
+  .options__grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  @media (min-width: 900px) {
+    .options__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .options__card {
+    padding: clamp(22px, 3vw, 36px);
+    border: 1px solid var(--rule);
+    background: var(--surface);
+  }
+
+  .options__card--touch {
+    border-color: var(--red);
+  }
+
+  .options__card h3 {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: baseline;
+    margin-bottom: 14px;
+  }
+
+  .options__price {
+    color: var(--red-hi);
+    font-size: 0.9em;
+  }
+
+  .options__card p {
+    color: var(--muted);
+    font-size: 16px;
+  }
+
+  .options__card .checklist {
+    font-size: 16px;
+    color: var(--muted);
+    margin-bottom: 0;
+  }
+
+  .options__note {
+    margin: 20px 0 24px;
+    font-size: 15px;
+    max-width: 80ch;
+  }
+
+  .options__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .options__season {
+    margin: 18px 0 0;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+</style>

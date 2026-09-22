@@ -1,0 +1,25 @@
+{
+  "name": "hopkins-haunted-attractions-new",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "shots": "node scripts/screenshots.mjs",
+    "check": "node scripts/check.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.3.3"
+  },
+  "allowScripts": {
+    "esbuild": true
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}

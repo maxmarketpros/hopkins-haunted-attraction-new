@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import { nav, links } from '../data/site';
+---
+
+<Base
+  title="Page Not Found | Hopkins Haunted Attraction"
+  description="That page doesn’t exist on the Hopkins Haunted Attraction site. Find tickets, dates, directions and the experience from here."
+  path="/404/"
+>
+  <section class="section nf">
+    <div class="container">
+      <p class="label">404</p>
+      <h1>Lost in the <span class="accent">woods</span></h1>
+      <p class="lede muted">That page isn’t here. The blog has been retired; everything useful now lives on these five pages.</p>
+      <ul class="clean nf__list">
+        {nav.map((n) => <li><a class="text-link" href={n.href}>{n.label}</a></li>)}
+        <li><a class="text-link" href={links.tickets} target="_blank" rel="noopener">Buy Tickets</a></li>
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    min-height: 60vh;
+  }
+  .nf h1 {
+    max-width: 10ch;
+  }
+  .nf__list {
+    display: grid;
+    gap: 8px;
+    margin-top: 24px;
+  }
+</style>

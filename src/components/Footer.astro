@@ -1,0 +1,231 @@
+---
+import { Image } from 'astro:assets';
+import logoWide from '../assets/images/logo-wide.png';
+import { nav, links, business, socials, season } from '../data/site';
+import Icon from './Icon.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer" id="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <Image
+          src={logoWide}
+          alt={business.name}
+          width={520}
+          height={261}
+          layout="fixed"
+          sizes="260px"
+          class="site-footer__logo"
+        />
+        <p class="site-footer__tag">
+          An outdoor haunted trail in {business.address.city}, {business.address.regionLong}. Serving{' '}
+          {business.address.county} and {business.address.area} since {business.established}.
+        </p>
+        <p class="site-footer__season">
+          {season.year} season · {season.hoursLine} on operating nights
+        </p>
+      </div>
+
+      <nav class="site-footer__nav" aria-label="Footer">
+        <h2 class="site-footer__h">Explore</h2>
+        <ul class="clean">
+          {
+            nav.map((item) => (
+              <li>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))
+          }
+          <li>
+            <a href={links.tickets} target="_blank" rel="noopener">
+              Buy Tickets <Icon name="external" size={14} />
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="site-footer__contact">
+        <h2 class="site-footer__h">Visit &amp; contact</h2>
+        <address>
+          <a class="site-footer__row" href={links.directions} target="_blank" rel="noopener">
+            <Icon name="pin" size={20} />
+            <span>
+              {business.venue}<br />
+              {business.address.street}<br />
+              {business.address.city}, {business.address.region} {business.address.postal}
+            </span>
+          </a>
+          <a class="site-footer__row" href={links.phone}>
+            <Icon name="phone" size={20} />
+            <span>{business.phoneDisplay}</span>
+          </a>
+          <a class="site-footer__row site-footer__email" href={links.email}>
+            <Icon name="mail" size={20} />
+            <span>{business.email}</span>
+          </a>
+        </address>
+      </div>
+
+      <div class="site-footer__social">
+        <h2 class="site-footer__h">Follow</h2>
+        <ul class="clean site-footer__social-list">
+          {
+            socials.map((s) => (
+              <li>
+                <a href={s.href} target="_blank" rel="noopener" aria-label={`${business.name} on ${s.name}`}>
+                  <Icon name={s.icon} size={22} />
+                  <span>{s.name}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <p>
+        © {year} {business.name}. {business.legalCopyrightLine} All rights reserved.
+      </p>
+      <p class="muted">Tickets are sold through FearTicket. Promotional artwork is illustrative of the attraction’s characters.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--surface);
+    border-top: 1px solid var(--rule);
+    padding-block: clamp(56px, 7vw, 96px) clamp(28px, 4vw, 48px);
+    font-size: 16px;
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: 40px;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 720px) {
+    .site-footer__grid {
+      grid-template-columns: 1.4fr 1fr 1fr;
+    }
+    .site-footer__brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .site-footer__grid {
+      grid-template-columns: 1.3fr 0.7fr 1.5fr 0.7fr;
+    }
+    .site-footer__brand {
+      grid-column: auto;
+    }
+  }
+
+  .site-footer__logo {
+    width: 260px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+
+  .site-footer__tag {
+    color: var(--muted);
+    max-width: 40ch;
+  }
+
+  .site-footer__season {
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bone-70);
+  }
+
+  .site-footer__h {
+    font-size: 13px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    margin-bottom: 18px;
+    text-transform: uppercase;
+  }
+
+  .site-footer__nav li a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 40px;
+    text-decoration: none;
+  }
+
+  .site-footer__nav li a:hover {
+    color: var(--red-hi);
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  .site-footer__row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    text-decoration: none;
+    padding: 6px 0;
+    line-height: 1.5;
+    min-height: 44px;
+  }
+
+  .site-footer__row svg {
+    flex: none;
+    margin-top: 3px;
+    color: var(--red-hi);
+  }
+
+  .site-footer__row:hover span {
+    text-decoration: underline;
+  }
+
+  .site-footer__email span {
+    overflow-wrap: anywhere;
+    font-size: 15px;
+  }
+
+  .site-footer__social-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .site-footer__social-list a {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    text-decoration: none;
+  }
+
+  .site-footer__social-list a:hover {
+    color: var(--red-hi);
+  }
+
+  .site-footer__bottom {
+    margin-top: clamp(40px, 5vw, 64px);
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 32px;
+    justify-content: space-between;
+    font-size: 14px;
+  }
+
+  .site-footer__bottom p {
+    margin: 0;
+  }
+</style>

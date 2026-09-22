@@ -1,0 +1,107 @@
+---
+import { season, formatDate } from '../data/site';
+---
+
+<div class="schedule">
+  {
+    season.ranges.map((range) => (
+      <section class="schedule__group" aria-labelledby={`sched-${range.dates[0]}`}>
+        <h3 class="schedule__label" id={`sched-${range.dates[0]}`}>
+          {range.label}
+        </h3>
+        <ul class="clean schedule__dates">
+          {range.dates.map((iso) => (
+            <li class="schedule__date">
+              <time datetime={`${iso}T${season.hours.openISO}`}>
+                <span class="schedule__dow">{formatDate(iso, { weekday: 'short' })}</span>
+                <span class="schedule__day">{formatDate(iso, { day: 'numeric' })}</span>
+                <span class="schedule__mon">{formatDate(iso, { month: 'short' })}</span>
+                <span class="visually-hidden">, {season.hoursLine}</span>
+              </time>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+  <p class="schedule__hours">
+    <strong>{season.hoursLine}</strong> on every operating night. The trail is closed on all other dates.
+  </p>
+</div>
+
+<style>
+  .schedule {
+    display: grid;
+    gap: 28px;
+  }
+
+  .schedule__group {
+    display: grid;
+    gap: 12px;
+  }
+
+  @media (min-width: 720px) {
+    .schedule__group {
+      grid-template-columns: 200px 1fr;
+      align-items: start;
+      padding-top: 16px;
+      border-top: 1px solid var(--rule);
+    }
+  }
+
+  .schedule__label {
+    font-size: 26px;
+    margin: 0;
+    color: var(--muted);
+    padding-top: 6px;
+  }
+
+  .schedule__dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .schedule__date time {
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    min-width: 88px;
+    padding: 12px 10px 10px;
+    border: 1px solid var(--rule-strong);
+    background: var(--surface);
+    border-top: 3px solid var(--red-hi);
+  }
+
+  .schedule__dow,
+  .schedule__mon {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  .schedule__day {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 0.9;
+  }
+
+  .schedule__hours {
+    margin: 8px 0 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    color: var(--muted);
+  }
+
+  .schedule__hours strong {
+    color: var(--bone);
+    font-family: var(--font-display);
+    font-size: 26px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-right: 10px;
+  }
+</style>

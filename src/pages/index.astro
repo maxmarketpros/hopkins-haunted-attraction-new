@@ -1,0 +1,596 @@
+---
+import { Picture, Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import HeroVideo from '../components/HeroVideo.astro';
+import TrailerModal from '../components/TrailerModal.astro';
+import CharacterCard from '../components/CharacterCard.astro';
+import TicketPanel from '../components/TicketPanel.astro';
+import Icon from '../components/Icon.astro';
+import ensemble from '../assets/images/ensemble-scene.jpg';
+import still from '../assets/images/hero-still.jpg';
+import handprint from '../assets/images/handprint.png';
+import {
+  business,
+  links,
+  season,
+  characters,
+  admissionTickets,
+  parkingTicket,
+  money,
+  lowestAdmission,
+  datesSentence,
+  feesNote,
+} from '../data/site';
+
+const preview = ['jester', 'tip-toes', 'slasher', 'bobby-the-butcher']
+  .map((slug) => characters.find((c) => c.slug === slug)!)
+  .filter(Boolean);
+const kids = admissionTickets.find((t) => t.id === 'haunt-kids-pass')!;
+---
+
+<Base
+  title="Haunted Trail in Simpsonville, SC | Hopkins Haunted Attraction"
+  description={`Hopkins Haunted Attraction is an outdoor walk-through haunted trail in Simpsonville, SC (Greenville County). ${season.year} nights: ${datesSentence}, ${season.hoursLine}. Tickets from ${money(lowestAdmission)}.`}
+  path="/"
+  overlayHeader
+>
+  <HeroVideo />
+
+  <!-- B. Essential information strip -->
+  <section class="strip" aria-label="Essential information">
+    <div class="container strip__inner">
+      <div class="strip__item">
+        <span class="strip__k">Location</span>
+        <span class="strip__v">{business.address.street}, {business.address.city}, {business.address.region}</span>
+        <a class="strip__link" href={links.directions} target="_blank" rel="noopener">Get directions</a>
+      </div>
+      <div class="strip__item">
+        <span class="strip__k">Hours</span>
+        <span class="strip__v">{season.hoursLine}</span>
+        <span class="strip__sub">On operating nights only</span>
+      </div>
+      <div class="strip__item">
+        <span class="strip__k">Admission</span>
+        <span class="strip__v">From {money(lowestAdmission)} · Kids 10 &amp; under {money(kids.price)}</span>
+        <a class="strip__link" href="/tickets/">All tickets &amp; dates</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. Introduction to the trail -->
+  <section class="section intro" aria-labelledby="intro-title">
+    <div class="container intro__grid">
+      <div class="intro__media media media--fade reveal">
+        <Picture
+          src={ensemble}
+          alt="Promotional artwork: a jester, a bat-wielding clown with pink and purple hair, a ragged youth and a hooded figure hanging from a rusted playground frame in moonlit woods."
+          formats={['avif', 'webp']}
+          width={900}
+          height={1200}
+          sizes="(min-width: 900px) 42vw, 100vw"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <div class="intro__copy reveal">
+        <p class="label">The Trail</p>
+        <h2 id="intro-title">This is no ordinary haunted trail</h2>
+        <p class="lede">
+          Step into the sinister woods of the 1800s. The deeper you venture, the closer you get to the nightmare.
+        </p>
+        <p>
+          Hopkins is a fully immersive outdoor horror experience in {business.address.city}, {business.address.regionLong}:
+          roughly 30 minutes of haunted trail, terrifying scenes and unexpected encounters, brought to life by live
+          actors, built sets and effects. You don’t just watch the story unfold. You become part of it.
+        </p>
+        <p class="muted">
+          Not a fall festival, not a hayride. Stay alert, watch your surroundings and whatever you do, don’t assume
+          you’re alone.
+        </p>
+        <a class="text-link" href="/experience/">Explore the Experience</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- D. Character preview -->
+  <section class="section section--surface cast" aria-labelledby="cast-title">
+    <Image src={handprint} alt="" class="handprint cast__handprint" width={220} height={350} loading="lazy" />
+    <div class="container">
+      <div class="cast__head reveal">
+        <p class="label">The Cast</p>
+        <h2 id="cast-title">They’re waiting<br />in the trees.</h2>
+        <p class="muted cast__sub">Eight characters walk the trail this season. Here are four of them.</p>
+      </div>
+      <ul class="clean cast__grid">
+        {
+          preview.map((c, i) => (
+            <li class:list={['cast__item', `cast__item--${i + 1}`, 'reveal']}>
+              <CharacterCard character={c} sizes="(min-width: 1024px) 22vw, (min-width: 600px) 45vw, 50vw" />
+            </li>
+          ))
+        }
+      </ul>
+      <div class="cast__cta reveal">
+        <a class="text-link" href="/experience/#characters">Meet the Characters</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- E. Trailer feature -->
+  <section class="section trailer-feature" aria-labelledby="trailer-title">
+    <div class="container">
+      <div class="trailer-feature__frame media reveal">
+        <Picture
+          src={still}
+          alt="A frame from the Hopkins Haunted Attraction trailer: a cracked, hollow-eyed mask lit from below."
+          formats={['avif', 'webp']}
+          width={1280}
+          height={960}
+          sizes="(min-width: 1280px) 1200px, 100vw"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="trailer-feature__overlay"></div>
+        <a class="trailer-feature__play" href="/experience/#trailer" data-trailer-open>
+          <span class="trailer-feature__btn"><Icon name="play" size={34} /></span>
+          <span class="trailer-feature__label">
+            <span class="label label--plain">Official trailer</span>
+            <span id="trailer-title" class="trailer-feature__title">Watch the trailer</span>
+          </span>
+        </a>
+      </div>
+      <p class="muted trailer-feature__note">Plays with sound. Full player with controls on <a href="/experience/#trailer">The Experience</a>.</p>
+    </div>
+  </section>
+
+  <!-- F. Ticket and season preview -->
+  <section class="section tickets-preview" aria-labelledby="tickets-title">
+    <div class="container">
+      <div class="tickets-preview__head reveal">
+        <div>
+          <p class="label">{season.year} Season</p>
+          <h2 id="tickets-title">Tickets &amp; nights</h2>
+        </div>
+        <div class="tickets-preview__dates">
+          {
+            season.ranges.map((r) => (
+              <span class="tickets-preview__date">{r.label}</span>
+            ))
+          }
+          <span class="tickets-preview__hours">{season.hoursLine} each night</span>
+        </div>
+      </div>
+      <div class="tickets-preview__grid reveal">
+        {admissionTickets.map((t) => <TicketPanel ticket={t} compact />)}
+      </div>
+      <p class="tickets-preview__note muted">
+        {feesNote} Children 10 and under must be accompanied by a responsible adult; the trail is PG-13 and designed to
+        scare. {parkingTicket.name}: {money(parkingTicket.price)} per vehicle, sold separately from admission.
+      </p>
+      <div class="tickets-preview__actions reveal">
+        <a class="btn btn--primary" href={links.tickets} target="_blank" rel="noopener">
+          Buy Tickets <Icon name="external" size={18} />
+        </a>
+        <a class="btn btn--outline" href="/tickets/">Tickets &amp; Dates</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- G. Visit preview and closing CTA -->
+  <section class="section section--surface visit" aria-labelledby="visit-title">
+    <div class="container visit__grid">
+      <div class="reveal">
+        <p class="label">Plan Your Visit</p>
+        <h2 id="visit-title">Find the farm</h2>
+        <p class="muted">
+          The trail runs through the woods of {business.venue} on the south side of {business.address.county}. Free
+          general parking; VIP parking closer to the entrance is {money(parkingTicket.price)} per vehicle.
+        </p>
+      </div>
+      <div class="visit__card reveal">
+        <p class="visit__address">
+          <span>{business.address.street}</span>
+          <span>{business.address.city}, {business.address.region} {business.address.postal}</span>
+        </p>
+        <div class="visit__actions">
+          <a class="btn btn--primary btn--sm" href={links.directions} target="_blank" rel="noopener">
+            <Icon name="pin" size={18} /> Directions
+          </a>
+          <a class="btn btn--outline btn--sm" href="/plan-your-visit/">Plan Your Visit</a>
+        </div>
+        <p class="visit__contact">
+          <a href={links.phone}>{business.phoneDisplay}</a> · <a href={links.email}>{business.email}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" aria-labelledby="closing-title">
+    <div class="closing__bg" aria-hidden="true">
+      <Image src={handprint} alt="" class="handprint closing__hand" width={220} height={350} loading="lazy" />
+    </div>
+    <div class="container closing__inner reveal">
+      <h2 id="closing-title">Do you have what it takes<br />to make it out alive?</h2>
+      <p class="lede muted">{datesSentence}. {season.hoursLine}. {business.address.city}, {business.address.region}.</p>
+      <a class="btn btn--primary closing__btn" href={links.tickets} target="_blank" rel="noopener">
+        Buy Tickets <Icon name="external" size={18} />
+      </a>
+    </div>
+  </section>
+
+  <TrailerModal slot="after-footer" />
+</Base>
+
+<style>
+  /* Strip */
+  .strip {
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: var(--bg);
+  }
+
+  .strip__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 720px) {
+    .strip__inner {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .strip__item {
+    display: grid;
+    gap: 4px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .strip__item:last-child {
+    border-bottom: 0;
+  }
+
+  @media (min-width: 720px) {
+    .strip__item {
+      padding: 28px 28px 28px 0;
+      border-bottom: 0;
+      border-right: 1px solid var(--rule);
+    }
+    .strip__item + .strip__item {
+      padding-left: 28px;
+    }
+    .strip__item:last-child {
+      border-right: 0;
+    }
+  }
+
+  .strip__k {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--red-text);
+  }
+
+  .strip__v {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(22px, 2vw, 26px);
+    line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .strip__sub,
+  .strip__link {
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .strip__link:hover {
+    color: var(--bone);
+  }
+
+  /* Intro */
+  .intro__grid {
+    display: grid;
+    gap: clamp(28px, 4vw, 64px);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .intro__grid {
+      grid-template-columns: 5fr 6fr;
+    }
+    .intro__copy {
+      padding-right: 4vw;
+    }
+  }
+
+  .intro__media {
+    aspect-ratio: 3 / 4;
+    max-height: 820px;
+  }
+
+  @media (max-width: 899px) {
+    .intro__media {
+      aspect-ratio: 4 / 5;
+      margin-inline: calc(var(--gutter) * -1);
+    }
+  }
+
+  .intro__copy h2 {
+    max-width: 12ch;
+  }
+
+  /* Cast */
+  .cast {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cast__handprint {
+    right: 4%;
+    top: 40px;
+    transform: rotate(12deg);
+  }
+
+  .cast__head {
+    display: grid;
+    gap: 6px;
+    margin-bottom: clamp(28px, 4vw, 56px);
+  }
+
+  .cast__head h2 {
+    max-width: 10ch;
+  }
+
+  .cast__sub {
+    font-size: 17px;
+  }
+
+  .cast__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(14px, 2vw, 28px);
+  }
+
+  @media (min-width: 900px) {
+    .cast__grid {
+      grid-template-columns: repeat(4, 1fr);
+      align-items: start;
+    }
+    .cast__item--2,
+    .cast__item--4 {
+      margin-top: 72px;
+    }
+  }
+
+  .cast__cta {
+    margin-top: clamp(28px, 4vw, 48px);
+  }
+
+  /* Trailer feature */
+  .trailer-feature__frame {
+    aspect-ratio: 2 / 1;
+    max-height: 640px;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 719px) {
+    .trailer-feature__frame {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  .trailer-feature__frame :global(img) {
+    object-position: 50% 18%;
+  }
+
+  .trailer-feature__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(8, 10, 9, 0.85), rgba(8, 10, 9, 0.1) 60%);
+  }
+
+  .trailer-feature__play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 22px;
+    padding: clamp(20px, 4vw, 48px);
+    text-decoration: none;
+    color: var(--bone);
+  }
+
+  .trailer-feature__btn {
+    flex: none;
+    width: clamp(64px, 8vw, 88px);
+    height: clamp(64px, 8vw, 88px);
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--red-hi);
+    color: #fff;
+    transition: transform 250ms var(--ease);
+  }
+
+  .trailer-feature__play:hover .trailer-feature__btn {
+    transform: scale(1.06);
+  }
+
+  .trailer-feature__label {
+    display: grid;
+  }
+
+  .trailer-feature__label .label {
+    margin-bottom: 4px;
+  }
+
+  .trailer-feature__title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(30px, 4vw, 56px);
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  .trailer-feature__note {
+    margin: 14px 0 0;
+    font-size: 14px;
+  }
+
+  /* Tickets preview */
+  .tickets-preview__head {
+    display: grid;
+    gap: 20px;
+    margin-bottom: clamp(24px, 3vw, 40px);
+    align-items: end;
+  }
+
+  @media (min-width: 900px) {
+    .tickets-preview__head {
+      grid-template-columns: 1fr auto;
+    }
+  }
+
+  .tickets-preview__head h2 {
+    margin-bottom: 0;
+  }
+
+  .tickets-preview__dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .tickets-preview__date {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    border: 1px solid var(--rule-strong);
+    border-top: 3px solid var(--red-hi);
+  }
+
+  .tickets-preview__hours {
+    flex-basis: 100%;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  @media (min-width: 900px) {
+    .tickets-preview__dates {
+      justify-content: flex-end;
+    }
+    .tickets-preview__hours {
+      text-align: right;
+    }
+  }
+
+  .tickets-preview__grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  @media (min-width: 720px) {
+    .tickets-preview__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .tickets-preview__note {
+    margin: 22px 0 0;
+    font-size: 15px;
+    max-width: 80ch;
+  }
+
+  .tickets-preview__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  /* Visit */
+  .visit__grid {
+    display: grid;
+    gap: clamp(28px, 4vw, 64px);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .visit__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .visit__card {
+    border-left: 3px solid var(--red-hi);
+    padding-left: clamp(20px, 3vw, 40px);
+  }
+
+  .visit__address {
+    display: grid;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(30px, 3.4vw, 44px);
+    line-height: 1;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .visit__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .visit__contact {
+    margin: 18px 0 0;
+    font-size: 15px;
+    color: var(--muted);
+    overflow-wrap: anywhere;
+  }
+
+  /* Closing */
+  .closing {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(88px, 12vw, 176px);
+    background: radial-gradient(60% 80% at 50% 100%, rgba(165, 29, 37, 0.22), transparent 70%), var(--bg);
+    text-align: center;
+  }
+
+  .closing__hand {
+    left: 50%;
+    top: -30px;
+    transform: translateX(-50%) rotate(-8deg);
+    opacity: 0.12;
+    width: clamp(200px, 26vw, 360px);
+  }
+
+  .closing__inner {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    position: relative;
+  }
+
+  .closing h2 {
+    font-size: clamp(40px, 7vw, 104px);
+    max-width: 14ch;
+  }
+
+  .closing__btn {
+    margin-top: 12px;
+    min-width: 240px;
+  }
+</style>

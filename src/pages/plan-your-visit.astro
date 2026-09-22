@@ -1,0 +1,459 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import FaqList from '../components/FaqList.astro';
+import Icon from '../components/Icon.astro';
+import { business, links, season, socials, faqGroups, parkingTicket, money, datesSentence, allFaqs } from '../data/site';
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: allFaqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const practical = [
+  {
+    k: 'Outdoors, in the woods',
+    v: 'The whole trail is outside on natural, uneven ground through the woods of Historic Hopkins Farm. It runs in most weather.',
+  },
+  {
+    k: 'What to wear',
+    v: 'Dress for the weather and wear comfortable, closed-toe shoes. Heels and flip-flops are strongly discouraged.',
+  },
+  {
+    k: 'Parking',
+    v: `General parking is free and accessible parking is available. VIP parking closer to the entrance is ${money(parkingTicket.price)} per vehicle, bought with your tickets.`,
+  },
+  {
+    k: 'Food & drink',
+    v: 'Coolers are not allowed. Food and drink vendors sell on site every operating night.',
+  },
+  {
+    k: 'Timing',
+    v: `Doors run ${season.hoursLine} on operating nights. Most groups walk the trail in about 30 minutes. Buying online lets you skip the ticket-booth line.`,
+  },
+  {
+    k: 'Children',
+    v: 'Kids 10 and under use the Kids Pass and must be with a responsible adult. The trail is PG-13 and designed to scare; parental discretion is strongly advised.',
+  },
+  {
+    k: 'Accessibility',
+    v: 'Accessible parking is available, but the trail itself is uneven, natural terrain and some areas may be difficult with wheelchairs, walkers or strollers. Contact us before buying so we can talk through current conditions.',
+  },
+  {
+    k: 'Health cautions',
+    v: 'Expect sudden scares, darkness, loud noises, flashing lights, fog and uneven ground. Guests who are pregnant or have heart, seizure, respiratory or mobility conditions should weigh these before entering.',
+  },
+];
+---
+
+<Base
+  title="Directions & FAQs | Hopkins Haunted Attraction"
+  description={`Plan your visit to Hopkins Haunted Attraction at 3717 Fork Shoals Rd., Simpsonville, SC 29680: directions, free and VIP parking, what to wear, kids guidance, accessibility, weather, refunds and every FAQ. Open ${datesSentence}, ${season.hoursLine}.`}
+  path="/plan-your-visit/"
+  breadcrumbs={[{ name: 'Plan Your Visit', path: '/plan-your-visit/' }]}
+  jsonLd={[faqLd]}
+>
+  <PageIntro
+    label={`${business.address.city} · ${business.address.county}, ${business.address.region}`}
+    title="Plan your"
+    titleAccent="visit"
+    lede={`Everything practical in one place: how to get to ${business.venue}, parking, what to wear, what to expect, and every question we get asked.`}
+    compact
+  >
+    <nav class="jump" aria-label="On this page">
+      <a href="#location">Location</a>
+      <a href="#know">Know before you go</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </PageIntro>
+
+  <!-- A. Location and arrival -->
+  <section class="section section--sm location" id="location" aria-labelledby="loc-h">
+    <div class="container location__grid">
+      <div class="location__copy reveal">
+        <p class="label">Location &amp; Arrival</p>
+        <h2 id="loc-h">{business.venue}</h2>
+        <p class="location__address">
+          <span>{business.address.street}</span>
+          <span>{business.address.city}, {business.address.region} {business.address.postal}</span>
+        </p>
+        <div class="location__actions">
+          <a id="primary-cta" class="btn btn--primary" href={links.directions} target="_blank" rel="noopener">
+            <Icon name="pin" size={18} /> Get Directions
+          </a>
+          <a class="btn btn--outline" href={links.tickets} target="_blank" rel="noopener">
+            Buy Tickets <Icon name="external" size={16} />
+          </a>
+        </div>
+        <ul class="clean location__contact">
+          <li>
+            <Icon name="phone" size={18} />
+            <a href={links.phone}>{business.phoneDisplay}</a>
+          </li>
+          <li>
+            <Icon name="mail" size={18} />
+            <a href={links.email}>{business.email}</a>
+          </li>
+        </ul>
+        <p class="muted location__hours">
+          Open {datesSentence} · {season.hoursLine}. <a href="/tickets/#dates">Full calendar</a>.
+        </p>
+      </div>
+      <div class="map reveal" aria-label="Map">
+        <button type="button" class="map__load" data-map-load={links.mapEmbed}>
+          <Icon name="pin" size={28} />
+          <span class="map__title">Load interactive map</span>
+          <span class="map__sub">Loads Google Maps. Or <a href={links.directions} target="_blank" rel="noopener">open directions in Google Maps</a>.</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- B. Practical information -->
+  <section class="section section--surface" id="know" aria-labelledby="know-h">
+    <div class="container">
+      <div class="sec-head reveal">
+        <p class="label">Know Before You Go</p>
+        <h2 id="know-h">The practical bits</h2>
+      </div>
+      <dl class="rows reveal">
+        {
+          practical.map((row) => (
+            <div class="rows__row">
+              <dt>{row.k}</dt>
+              <dd>{row.v}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- C. Complete FAQ -->
+  <section class="section" id="faq" aria-labelledby="faq-h">
+    <div class="container">
+      <div class="sec-head reveal">
+        <p class="label">Frequently Asked Questions</p>
+        <h2 id="faq-h">Questions, answered</h2>
+        <p class="muted">Everything from our previous FAQ and the ticketing site, grouped by topic.</p>
+      </div>
+      <div class="reveal">
+        <FaqList groups={faqGroups} />
+      </div>
+    </div>
+  </section>
+
+  <!-- D. Questions and updates -->
+  <section class="section section--surface contact" id="contact" aria-labelledby="contact-h">
+    <div class="container contact__grid">
+      <div class="reveal">
+        <p class="label">Questions &amp; Updates</p>
+        <h2 id="contact-h">Still wondering?</h2>
+        <p class="muted">
+          Call for anything time-sensitive on an operating night, such as accessibility or arrival questions. Email
+          works well for group questions and anything that can wait a day. Weather delays and closures are announced on
+          our social channels first.
+        </p>
+      </div>
+      <div class="contact__cards reveal">
+        <a class="contact__card" href={links.phone}>
+          <Icon name="phone" size={22} />
+          <span class="contact__k">Call</span>
+          <span class="contact__v">{business.phoneDisplay}</span>
+        </a>
+        <a class="contact__card contact__card--email" href={links.email}>
+          <Icon name="mail" size={22} />
+          <span class="contact__k">Email</span>
+          <span class="contact__v">{business.email}</span>
+        </a>
+        <div class="contact__card contact__card--social">
+          <span class="contact__k">Follow for updates</span>
+          <ul class="clean contact__social">
+            {
+              socials.map((s) => (
+                <li>
+                  <a href={s.href} target="_blank" rel="noopener" aria-label={`${business.name} on ${s.name}`}>
+                    <Icon name={s.icon} size={22} />
+                    <span>{s.name}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .jump a {
+    text-decoration: none;
+    border-bottom: 2px solid var(--red);
+    padding: 6px 0;
+  }
+
+  .jump a:hover {
+    color: var(--red-hi);
+  }
+
+  .sec-head {
+    margin-bottom: clamp(24px, 3vw, 40px);
+  }
+
+  .sec-head h2 {
+    margin-bottom: 0.3em;
+  }
+
+  .sec-head p {
+    margin: 0;
+  }
+
+  /* Location */
+  .location__grid {
+    display: grid;
+    gap: clamp(28px, 4vw, 64px);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .location__grid {
+      grid-template-columns: 6fr 6fr;
+    }
+  }
+
+  .location__address {
+    display: grid;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(32px, 3.6vw, 48px);
+    line-height: 1;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    border-left: 3px solid var(--red-hi);
+    padding-left: 18px;
+  }
+
+  .location__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .location__contact {
+    display: grid;
+    gap: 6px;
+  }
+
+  .location__contact li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+  }
+
+  .location__contact svg {
+    color: var(--red-hi);
+    flex: none;
+  }
+
+  .location__contact a {
+    overflow-wrap: anywhere;
+  }
+
+  .location__hours {
+    margin: 18px 0 0;
+    font-size: 15px;
+  }
+
+  .map {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    display: grid;
+  }
+
+  .map :global(iframe) {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    filter: grayscale(1) invert(0.92) contrast(1.05);
+  }
+
+  .map__load {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 10px;
+    background: transparent;
+    border: 0;
+    color: var(--bone);
+    cursor: pointer;
+    padding: 24px;
+    text-align: center;
+  }
+
+  .map__load svg {
+    color: var(--red-hi);
+  }
+
+  .map__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .map__sub {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 34ch;
+  }
+
+  /* Rows */
+  .rows {
+    margin: 0;
+  }
+
+  .rows__row {
+    display: grid;
+    gap: 6px;
+    padding: 18px 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .rows__row:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (min-width: 720px) {
+    .rows__row {
+      grid-template-columns: 240px 1fr;
+      gap: 32px;
+    }
+  }
+
+  .rows dt {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1.05;
+  }
+
+  .rows dd {
+    margin: 0;
+    color: var(--muted);
+    max-width: 70ch;
+  }
+
+  /* Contact */
+  .contact__grid {
+    display: grid;
+    gap: clamp(24px, 4vw, 64px);
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .contact__grid {
+      grid-template-columns: 5fr 7fr;
+    }
+  }
+
+  .contact__cards {
+    display: grid;
+    gap: 12px;
+  }
+
+  @media (min-width: 600px) {
+    .contact__cards {
+      grid-template-columns: 1fr 1fr;
+    }
+    .contact__card--email {
+      grid-column: 1 / -1;
+      order: 3;
+    }
+  }
+
+  .contact__card {
+    display: grid;
+    gap: 6px;
+    padding: 22px;
+    border: 1px solid var(--rule);
+    background: var(--bg);
+    text-decoration: none;
+    min-height: 44px;
+  }
+
+  a.contact__card:hover {
+    border-color: var(--red-hi);
+  }
+
+  .contact__card svg {
+    color: var(--red-hi);
+  }
+
+  .contact__k {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  .contact__v {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.05;
+  }
+
+  .contact__card--email .contact__v {
+    text-transform: none;
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  .contact__social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+  }
+
+  .contact__social a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    text-decoration: none;
+  }
+
+  .contact__social a:hover {
+    color: var(--red-hi);
+  }
+</style>

@@ -1,0 +1,150 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import TicketBar from '../components/TicketBar.astro';
+import { SITE_URL, business, links, socials, season } from '../data/site';
+
+interface Crumb {
+  name: string;
+  path: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  /** Canonical path, always with trailing slash, e.g. "/tickets/". */
+  path: string;
+  ogImage?: string;
+  /** Home page: header floats over the hero and turns opaque on scroll. */
+  overlayHeader?: boolean;
+  breadcrumbs?: Crumb[];
+  /** Additional JSON-LD objects for this page. */
+  jsonLd?: Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  path,
+  ogImage = '/og/og-default.jpg',
+  overlayHeader = false,
+  breadcrumbs = [],
+  jsonLd = [],
+} = Astro.props;
+
+const canonical = new URL(path, SITE_URL).href;
+const ogImageUrl = new URL(ogImage, SITE_URL).href;
+
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': ['TouristAttraction', 'LocalBusiness'],
+  '@id': `${SITE_URL}/#business`,
+  name: business.name,
+  url: SITE_URL,
+  description:
+    'Outdoor walk-through haunted trail with live actors, sets and effects, set in the sinister woods of the 1800s at Historic Hopkins Farm in Simpsonville, South Carolina.',
+  image: `${SITE_URL}/og/og-default.jpg`,
+  logo: `${SITE_URL}/icons/icon-512.png`,
+  telephone: business.phoneTel,
+  email: business.email,
+  foundingDate: String(business.established),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: business.address.street,
+    addressLocality: business.address.city,
+    addressRegion: business.address.region,
+    postalCode: business.address.postal,
+    addressCountry: business.address.country,
+  },
+  areaServed: ['Simpsonville, SC', 'Greenville County, SC', 'Upstate South Carolina'],
+  sameAs: socials.map((s) => s.href),
+  isAccessibleForFree: false,
+  publicAccess: true,
+  openingHoursSpecification: season.ranges.map((r) => ({
+    '@type': 'OpeningHoursSpecification',
+    validFrom: r.dates[0],
+    validThrough: r.dates[r.dates.length - 1],
+    opens: season.hours.openISO,
+    closes: season.hours.closeISO,
+  })),
+  potentialAction: {
+    '@type': 'BuyAction',
+    target: links.tickets,
+  },
+};
+
+const breadcrumbLd =
+  breadcrumbs.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [{ name: 'Home', path: '/' }, ...breadcrumbs].map((c, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: c.name,
+          item: new URL(c.path, SITE_URL).href,
+        })),
+      }
+    : null;
+
+const ldBlocks = [organization, breadcrumbLd, ...jsonLd].filter(Boolean);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#080A09" />
+    <meta name="color-scheme" content="dark" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={business.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/icons/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <link rel="preload" href="/fonts/barlow-condensed-800-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/manrope-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+
+    <meta name="generator" content={Astro.generator} />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    {ldBlocks.map((block) => <script type="application/ld+json" set:html={JSON.stringify(block)} />)}
+  </head>
+  <body class:list={{ 'has-overlay-header': overlayHeader }}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header path={path} overlay={overlayHeader} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <TicketBar />
+    <slot name="after-footer" />
+    <script src="../scripts/main.js"></script>
+  </body>
+</html>
+
+<style is:global>
+  main:focus {
+    outline: none;
+  }
+</style>
