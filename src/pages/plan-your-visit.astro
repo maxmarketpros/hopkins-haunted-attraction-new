@@ -105,12 +105,15 @@ const practical = [
           Open {datesSentence} · {season.hoursLine}. <a href="/tickets/#dates">Full calendar</a>.
         </p>
       </div>
-      <div class="map reveal" aria-label="Map">
-        <button type="button" class="map__load" data-map-load={links.mapEmbed}>
-          <Icon name="pin" size={28} />
-          <span class="map__title">Load interactive map</span>
-          <span class="map__sub">Loads Google Maps. Or <a href={links.directions} target="_blank" rel="noopener">open directions in Google Maps</a>.</span>
-        </button>
+      <div class="map reveal">
+        <iframe
+          src={links.mapEmbed}
+          title="Map showing the location of Hopkins Haunted Attraction, 3717 Fork Shoals Rd., Simpsonville, SC"
+          loading="lazy"
+          allowfullscreen
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+        <a class="map__link" href={links.directions} target="_blank" rel="noopener">Open in Google Maps <Icon name="external" size={14} /></a>
       </div>
     </div>
   </section>
@@ -289,45 +292,34 @@ const practical = [
     aspect-ratio: 4 / 3;
     background: var(--surface);
     border: 1px solid var(--rule);
-    display: grid;
   }
 
-  .map :global(iframe) {
+  .map iframe {
     width: 100%;
     height: 100%;
     border: 0;
-    filter: grayscale(1) invert(0.92) contrast(1.05);
+    display: block;
   }
 
-  .map__load {
-    display: grid;
-    place-content: center;
-    justify-items: center;
-    gap: 10px;
-    background: transparent;
-    border: 0;
-    color: var(--bone);
-    cursor: pointer;
-    padding: 24px;
-    text-align: center;
-  }
-
-  .map__load svg {
-    color: var(--red-hi);
-  }
-
-  .map__title {
-    font-family: var(--font-display);
+  .map__link {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: rgba(8, 10, 9, 0.9);
+    border: 1px solid var(--rule-strong);
+    font-size: 13px;
     font-weight: 700;
-    font-size: 24px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    text-decoration: none;
   }
 
-  .map__sub {
-    font-size: 14px;
-    color: var(--muted);
-    max-width: 34ch;
+  .map__link:hover {
+    border-color: var(--bone);
   }
 
   /* Rows */

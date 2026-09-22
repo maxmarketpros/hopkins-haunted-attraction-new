@@ -328,27 +328,6 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 })();
 
 /* ------------------------------------------------------------------ */
-/* Lazy map embed                                                      */
-/* ------------------------------------------------------------------ */
-(() => {
-  const btn = $('[data-map-load]');
-  if (!btn) return;
-  btn.addEventListener('click', () => {
-    const wrap = btn.closest('.map');
-    if (!wrap) return;
-    const iframe = document.createElement('iframe');
-    iframe.src = btn.dataset.mapLoad;
-    iframe.title = 'Map showing the location of Hopkins Haunted Attraction';
-    iframe.loading = 'lazy';
-    iframe.referrerPolicy = 'no-referrer-when-downgrade';
-    iframe.setAttribute('allowfullscreen', '');
-    wrap.classList.add('is-loaded');
-    wrap.appendChild(iframe);
-    btn.remove();
-  });
-})();
-
-/* ------------------------------------------------------------------ */
 /* Scroll reveals                                                      */
 /* ------------------------------------------------------------------ */
 (() => {
