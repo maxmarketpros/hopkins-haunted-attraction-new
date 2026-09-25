@@ -3,7 +3,7 @@
  * Usage: node scripts/check.mjs [baseUrl]
  * Covers: hero video behaviour (autoplay, reduced motion, pause control),
  * trailer modal (open, Escape, focus restore), mobile menu (Escape, focus),
- * ticket bar (appears after the CTA scrolls away), lightbox, FAQ deep links,
+ * homepage slogan, absence of the mobile ticket bar, lightbox, FAQ deep links,
  * link integrity, no horizontal overflow, and images with dimensions.
  */
 import { chromium } from 'playwright';
@@ -122,18 +122,11 @@ const browser = await chromium.launch();
   const src480 = await page.evaluate(() => document.querySelector('.hero-video video').getAttribute('src'));
   ok('mobile hero loads the 480p variant', src480 === '/video/hero-bg-480.mp4', src480);
 
-  // Ticket bar hidden at top, visible after scrolling past CTA
-  const barTop = await page.evaluate(() => document.querySelector('.ticket-bar').classList.contains('is-visible'));
-  await page.evaluate(() => window.scrollTo(0, 1600));
-  await page.waitForTimeout(500);
-  const barScrolled = await page.evaluate(() => document.querySelector('.ticket-bar').classList.contains('is-visible'));
+  const tagline = await page.locator('.hero__tagline').textContent();
+  ok('homepage slogan has the requested text', tagline?.trim() === 'The trail that haunts you', tagline?.trim());
+  ok('mobile ticket bar is absent', await page.locator('.ticket-bar').count() === 0);
   const pad = await page.evaluate(() => getComputedStyle(document.body).paddingBottom);
-  ok('ticket bar hidden while hero CTA visible', barTop === false);
-  ok('ticket bar appears after CTA scrolls away', barScrolled === true);
-  ok('body reserves space for ticket bar', parseInt(pad) > 40, pad);
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  await page.waitForTimeout(500);
-  ok('ticket bar hides over the footer', await page.evaluate(() => !document.querySelector('.ticket-bar').classList.contains('is-visible')));
+  ok('no body padding reserved for ticket bar', pad === '0px', pad);
 
   // Mobile menu (opened while scrolled down: header backdrop-filter must not trap the fixed panel)
   await page.evaluate(() => window.scrollTo(0, 900));
@@ -155,13 +148,8 @@ const browser = await chromium.launch();
     await page.goto(base + path, { waitUntil: 'networkidle' });
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     ok(`no horizontal overflow on ${path} @390`, overflow === 0, `${overflow}px`);
+    ok(`no mobile ticket bar on ${path}`, await page.locator('.ticket-bar').count() === 0);
   }
-
-  // Trailer player on Experience should hide the ticket bar while in view
-  await page.goto(base + '/experience/', { waitUntil: 'networkidle' });
-  await page.evaluate(() => document.getElementById('trailer').scrollIntoView());
-  await page.waitForTimeout(600);
-  ok('ticket bar hidden while trailer player is in view', await page.evaluate(() => !document.querySelector('.ticket-bar').classList.contains('is-visible')));
 
   ok('no page errors (mobile)', errors.length === 0, errors.join(' | '));
   await ctx.close();
