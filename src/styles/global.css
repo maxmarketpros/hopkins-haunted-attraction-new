@@ -64,7 +64,6 @@
   --section-sm: clamp(40px, 6vw, 88px);
 
   --header-h: 80px;
-  --ticket-bar-h: 0px;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dur: 480ms;
@@ -108,7 +107,6 @@ body {
   background: var(--bg);
   color: var(--bone);
   overflow-x: clip;
-  padding-bottom: var(--ticket-bar-h);
 }
 
 @media (min-width: 900px) {
