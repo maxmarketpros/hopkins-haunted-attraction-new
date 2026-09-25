@@ -67,50 +67,6 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 })();
 
 /* ------------------------------------------------------------------ */
-/* Mobile ticket bar                                                   */
-/* ------------------------------------------------------------------ */
-(() => {
-  const bar = $('.ticket-bar');
-  const sentinel = $('#primary-cta');
-  if (!bar || !sentinel || !('IntersectionObserver' in window)) return;
-  let scrolledPast = false;
-  let blocked = 0;
-
-  const apply = () => {
-    const show = scrolledPast && blocked === 0;
-    bar.classList.toggle('is-visible', show);
-    // `inert` keeps the hidden bar out of the tab order and accessibility tree.
-    bar.inert = !show;
-    document.documentElement.style.setProperty('--ticket-bar-h', show ? `${bar.offsetHeight}px` : '0px');
-  };
-
-  new IntersectionObserver(
-    ([entry]) => {
-      scrolledPast = !entry.isIntersecting && entry.boundingClientRect.top < 0;
-      apply();
-    },
-    { threshold: 0 }
-  ).observe(sentinel);
-
-  // Anything marked data-hide-ticket-bar (trailer player) or the footer hides the bar while visible.
-  const blockers = $$('[data-hide-ticket-bar], #site-footer');
-  if (blockers.length) {
-    const seen = new Set();
-    const blockerObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((en) => (en.isIntersecting ? seen.add(en.target) : seen.delete(en.target)));
-        blocked = seen.size;
-        apply();
-      },
-      { threshold: 0.05 }
-    );
-    blockers.forEach((el) => blockerObserver.observe(el));
-  }
-
-  window.addEventListener('resize', apply, { passive: true });
-})();
-
-/* ------------------------------------------------------------------ */
 /* Hero background video                                               */
 /* ------------------------------------------------------------------ */
 (() => {
