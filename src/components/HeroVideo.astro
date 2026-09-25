@@ -48,6 +48,7 @@ import { links, business, datesCompact, season } from '../data/site';
     <h1 id="hero-title">
       Enter the Sinister <span class="accent">Woods.</span>
     </h1>
+    <p class="hero__tagline">The trail that haunts you</p>
     <p class="lede hero__lede">
       An outdoor, walk-through haunted trail of live actors, sets and effects, set in the sinister woods of the 1800s
       at {business.venue} in {business.address.city}, {business.address.regionLong}.
@@ -151,6 +152,17 @@ import { links, business, datesCompact, season } from '../data/site';
     margin-bottom: 0.3em;
     max-width: 17ch;
     text-shadow: 0 2px 30px rgba(0, 0, 0, 0.45);
+  }
+
+  .hero__tagline {
+    font-family: var(--font-display);
+    font-size: clamp(25px, 3.5vw, 40px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+    color: var(--red-hi);
+    margin: 0 0 20px;
   }
 
   .hero__lede {
